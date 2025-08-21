@@ -1,11 +1,11 @@
-import React from "react";
-import logo from "../assets/logo.png"
+// import React from "react";
+// import logo from "../assets/logo.png"
 
 const Navbar = () => {
   return (
     <nav className="bg-blend-difference px-6 py-3 flex justify-between items-center fixed-top">
       
-      <div className="text-2xl font-bold"><img src={logo} alt=""  /></div>
+      <div className="text-2xl font-bold">MyLogo</div>
 
       
     </nav>

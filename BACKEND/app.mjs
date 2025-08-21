@@ -3,6 +3,7 @@ import env from "dotenv"
 import cors from "cors"
 import dbConnect from "./config/db.config.mjs"
 import userRoute from "./routes/user.route.mjs"
+import applicationRoutes from "./routes/applcation.route.mjs"
 
 
 env.config() 
@@ -17,6 +18,9 @@ app.use(cors())
 
 
 app.use("/api/users", userRoute)
+app.use("/uploads", express.static("uploads"));
+app.use("/application", applicationRoutes);
+
 
 app.listen(process.env.PORT || 3000, err => {
     if (err) {
