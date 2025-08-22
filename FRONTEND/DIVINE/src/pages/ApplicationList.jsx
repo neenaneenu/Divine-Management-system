@@ -18,11 +18,12 @@ const ApplicationList = () => {
     fetchApplications();
   }, []);
 
-  // 🔎 Filtered applications
-  const filteredApplications = applications.filter((app) =>
-    app.name.toLowerCase().includes(search.toLowerCase()) ||
-    app.applicationNumber.toLowerCase().includes(search.toLowerCase()) ||
-    app.fatherName.toLowerCase().includes(search.toLowerCase())
+  // 🔎 Filter applications by name, appNo, or fatherName
+  const filteredApplications = applications.filter(
+    (app) =>
+      app.name.toLowerCase().includes(search.toLowerCase()) ||
+      app.applicationNumber.toLowerCase().includes(search.toLowerCase()) ||
+      app.fatherName.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -52,6 +53,8 @@ const ApplicationList = () => {
               <th>Blood Group</th>
               <th>Photo</th>
               <th>Signature</th>
+              <th>Bill number</th>
+              <th>Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -84,6 +87,8 @@ const ApplicationList = () => {
                     />
                   )}
                 </td>
+                <td>{app.billNumber}</td>
+                <td>{app.amount}</td>
               </tr>
             ))}
           </tbody>

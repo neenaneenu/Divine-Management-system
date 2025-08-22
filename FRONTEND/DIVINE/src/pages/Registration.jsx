@@ -59,6 +59,7 @@ const DrivingSchoolForm = () => {
 
       alert("Application Submitted Successfully ✅");
       console.log(res.data);
+      
     } catch (error) {
       console.error(error);
       alert("Error submitting application ❌");

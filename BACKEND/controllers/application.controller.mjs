@@ -16,7 +16,9 @@ export const createApplication = async (req, res) => {
       pin,
       vehicleClass,
       bloodGroup,
-      email
+      email,
+      billNumber,  
+      amount,
     } = req.body;
 
     // Handle uploaded files
@@ -39,7 +41,9 @@ export const createApplication = async (req, res) => {
       email,
       photo,
       signature,
-      licenseFile
+      licenseFile,
+      billNumber,  
+      amount,
     });
 
     await application.save();
