@@ -49,7 +49,7 @@ const Login = () => {
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative"  style={{ backgroundColor: "#002044" }}>
       {/* Login Form */}
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
@@ -90,7 +90,7 @@ const Login = () => {
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-semibold p-3 rounded-lg hover:bg-blue-600 transition"
+            className="w-full bg-blue-500 text-white font-semibold p-3 rounded-sm hover:bg-blue-600 transition"
           >
             Login
           </button>
@@ -167,7 +167,7 @@ const Login = () => {
               {/* Signup Button */}
               <button
                 type="submit"
-                className="w-full bg-green-500 text-white font-semibold p-3 rounded-lg hover:bg-green-600 transition"
+            className="w-full bg-blue-500 text-white font-semibold p-3 rounded-sm hover:bg-blue-600 transition"
               >
                 Sign Up
               </button>

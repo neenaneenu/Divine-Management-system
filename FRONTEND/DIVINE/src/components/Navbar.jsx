@@ -3,7 +3,7 @@
 
 const Navbar = () => {
   return (
-    <nav className="bg-blend-difference px-6 py-3 flex justify-between items-center fixed-top">
+    <nav className="bg-blend-difference px-6 py-3 flex justify-between items-center fixed-top"  style={{ backgroundColor: "##fff8f0" }}>
       
       <div className="text-2xl font-bold">MyLogo</div>
 

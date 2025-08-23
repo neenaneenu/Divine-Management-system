@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, Button, Container, Row, Col } from "react-bootstrap"
 import Navbar from '../components/Navbar'
 import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -9,14 +10,25 @@ const Home = () => {
   const handleSubmit = () => {
     navigate("/register");
   };
+   const handleLogout = () => {
+    
+    localStorage.removeItem("token");
+    sessionStorage.clear();
+    toast.success("Logout successful!");
+
+    
+    navigate("/");
+  };
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#002044", minHeight: "100vh" }}>
       <Navbar />
 
       <Container className="home-container">
         <Row className="g-4 justify-content-center">
-          
+           <Button variant="secondary" onClick={handleLogout}>
+                        ⬅ Logout
+                      </Button>
           {/* License Card */}
           <Col md={3} sm={6} xs={12}>
             <Card className="custom-card h-100 text-center card-hover">
@@ -63,6 +75,7 @@ const Home = () => {
       <style>{`
         .home-container {
           margin-top: 100px; /* pushes cards below fixed navbar */
+          padding-bottom: 50px; /* add spacing at bottom */
         }
         .custom-card {
           width: 100%;
