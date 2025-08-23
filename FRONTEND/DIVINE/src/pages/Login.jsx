@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Login from "../components/login";
 
+
 const Homelogin = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#002044" }}>

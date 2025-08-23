@@ -1,9 +1,8 @@
 import React from 'react'
 import { Card, Button, Container, Row, Col } from "react-bootstrap"
-import Navbar from '../components/Navbar'
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
-
+import logo from "../assets/logo.png"
 const Home = () => {
   const navigate = useNavigate();
 
@@ -22,13 +21,19 @@ const Home = () => {
 
   return (
     <div style={{ backgroundColor: "#002044", minHeight: "100vh" }}>
-      <Navbar />
+      
+      <nav className="bg-blend-difference px-6 py-3 flex justify-between items-center fixed-top"  style={{ backgroundColor: "#002044" }}>
+            
+            <div className="text-2xl font-bold"><img src={logo} alt=""  style={{height: "80px"}}/></div>
+               <Button variant="secondary" onClick={handleLogout}>
+                        ⬅ Logout
+           </Button>
+            
+          </nav>
 
       <Container className="home-container">
         <Row className="g-4 justify-content-center">
-           <Button variant="secondary" onClick={handleLogout}>
-                        ⬅ Logout
-                      </Button>
+         
           {/* License Card */}
           <Col md={3} sm={6} xs={12}>
             <Card className="custom-card h-100 text-center card-hover">
