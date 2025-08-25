@@ -1,74 +1,77 @@
 import React from 'react'
-import { Card, Button, Container, Row, Col } from "react-bootstrap"
+import { Card, Container, Row, Col } from "react-bootstrap"
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
 import logo from "../assets/logo.png"
+import license from "../assets/license.png"
+import billing from "../assets/billing.png"
+import Rc from "../assets/Rc.png"
+
+
+
+
 const Home = () => {
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    navigate("/register");
+  const handleSubmit = (path) => {
+    navigate(path);
   };
-   const handleLogout = () => {
-    
+
+  const handleLogout = () => {
     localStorage.removeItem("token");
     sessionStorage.clear();
     toast.success("Logout successful!");
-
-    
     navigate("/");
   };
 
   return (
     <div style={{ backgroundColor: "#002044", minHeight: "100vh" }}>
-      
-      <nav className="bg-blend-difference px-6 py-3 flex justify-between items-center fixed-top"  style={{ backgroundColor: "#002044" }}>
-            
-            <div className="text-2xl font-bold"><img src={logo} alt=""  style={{height: "80px"}}/></div>
-               <Button variant="secondary" onClick={handleLogout}>
-                        ⬅ Logout
-           </Button>
-            
-          </nav>
+      {/* Navbar */}
+      <nav className="px-6 py-3 flex justify-between items-center fixed-top" style={{ backgroundColor: "#002044" }}>
+        <div className="text-2xl font-bold">
+          <img src={logo} alt="" style={{ height: "80px" }} />
+        </div>
+        <button className="btn btn-secondary" onClick={handleLogout}>
+          ⬅ Logout
+        </button>
+      </nav>
 
+      {/* Cards */}
       <Container className="home-container">
-        <Row className="g-4 justify-content-center">
-         
-          {/* License Card */}
+        <Row className="g-4 justify-content-center mt-5">
+
+          {/* License Icon */}
           <Col md={3} sm={6} xs={12}>
-            <Card className="custom-card h-100 text-center card-hover">
-              <Card.Img variant="top" src="https://picsum.photos/200" />
+            <Card className="app-card text-center" onClick={() => handleSubmit("/register")}>
+              <div className="icon-circle">
+                <img src={license} alt="License" />
+              </div>
               <Card.Body>
                 <Card.Title>License</Card.Title>
-                <Button variant="primary" onClick={handleSubmit}>
-                  Go somewhere
-                </Button>
               </Card.Body>
             </Card>
           </Col>
 
-          {/* Billing Card */}
+          {/* Billing Icon */}
           <Col md={3} sm={6} xs={12}>
-            <Card className="custom-card h-100 text-center card-hover">
-              <Card.Img variant="top" src="https://picsum.photos/200" />
+            <Card className="app-card text-center" onClick={() => handleSubmit("/billing")}>
+              <div className="icon-circle">
+                <img src={billing} alt="Billing" />
+              </div>
               <Card.Body>
                 <Card.Title>Billing</Card.Title>
-                <Button variant="primary" onClick={handleSubmit}>
-                  Go somewhere
-                </Button>
               </Card.Body>
             </Card>
           </Col>
 
-          {/* RC Card */}
+          {/* RC Icon */}
           <Col md={3} sm={6} xs={12}>
-            <Card className="custom-card h-100 text-center card-hover">
-              <Card.Img variant="top" src="https://picsum.photos/200" />
+            <Card className="app-card text-center" onClick={() => handleSubmit("/rc")}>
+              <div className="icon-circle">
+                <img src={Rc} alt="RC" />
+              </div>
               <Card.Body>
                 <Card.Title>RC</Card.Title>
-                <Button variant="primary" onClick={handleSubmit}>
-                  Go somewhere
-                </Button>
               </Card.Body>
             </Card>
           </Col>
@@ -79,21 +82,35 @@ const Home = () => {
       {/* Custom CSS */}
       <style>{`
         .home-container {
-          margin-top: 100px; /* pushes cards below fixed navbar */
-          padding-bottom: 50px; /* add spacing at bottom */
+          margin-top: 100px; 
+          padding-bottom: 50px;
         }
-        .custom-card {
-          width: 100%;
-          border-radius: 12px;
-          overflow: hidden;
+        .app-card {
+          border-radius: 16px;
+          cursor: pointer;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          padding: 20px;
+          background: white;
+          border: none;
           box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .card-hover {
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-hover:hover {
-          transform: translateY(-8px);
+        .app-card:hover {
+          transform: translateY(-6px);
           box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .icon-circle {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          background: #f1f5f9;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 15px auto;
+        }
+        .icon-circle img {
+          width: 40px;
+          height: 40px;
         }
       `}</style>
     </div>

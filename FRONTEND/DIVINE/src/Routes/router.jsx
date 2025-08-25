@@ -5,7 +5,7 @@ import Home from "../pages/Home";
 import Registration from "../pages/Registration";
 import ApplicationList from "../pages/ApplicationList";
 import EditApplication from "../pages/EditApplication";
-
+import BillingForm from "../pages/billing";
 
 const AppRouter = () => {
   return (
@@ -16,6 +16,7 @@ const AppRouter = () => {
         <Route path="register" element={<Registration />} />
         <Route path="/applications" element={<ApplicationList />} />
         <Route path="/application/edit/:id" element={<EditApplication />} />
+        <Route path="/billing" element={<BillingForm/>}/>
 
 
         
