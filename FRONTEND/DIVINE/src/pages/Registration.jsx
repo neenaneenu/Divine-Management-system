@@ -116,7 +116,7 @@ const DrivingSchoolForm = () => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Father / W/O / D/O</Form.Label>
+              <Form.Label>Gardian</Form.Label>
               <Form.Control
                 type="text"
                 name="fatherName"
@@ -189,17 +189,22 @@ const DrivingSchoolForm = () => {
                 </Form.Group>
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Class of Vehicle</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="vehicleClass"
-                    value={formData.vehicleClass}
-                    onChange={handleChange}
-                    placeholder="Eg: LMV, MCWG"
-                  />
-                </Form.Group>
-              </Col>
+  <Form.Group className="mb-3">
+    <Form.Label>Class of Vehicle</Form.Label>
+    <Form.Select
+      name="vehicleClass"
+      value={formData.vehicleClass}
+      onChange={handleChange}
+    >
+      <option value="">-- Select Vehicle Class --</option>
+      <option value="TWO WHEELER">TWO WHEELER</option>
+      <option value="FOUR WHEELER">FOUR WHEELER</option>
+      <option value="CONDUCTOR LICENSE">CONDUCTOR LICENSE</option>
+      <option value="HEAVY LICENSE">HEAVY LICENSE</option>
+    </Form.Select>
+  </Form.Group>
+</Col>
+
             </Row>
 
             <Form.Group className="mb-3">

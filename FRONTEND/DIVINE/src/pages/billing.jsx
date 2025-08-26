@@ -1,8 +1,10 @@
 import React, { useRef, useState } from "react";
 import { Button, Form, Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const BillingForm = () => {
   const formRef = useRef();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     billNo: "",
     date: "",
@@ -147,8 +149,9 @@ const BillingForm = () => {
         </Form>
       </div>
 
-      <div className="text-center mt-3">
-        <Button variant="primary" onClick={handlePrint}>Print Bill</Button>
+      <div className="text-center mt-3 d-flex justify-content-center gap-2">
+        <Button variant="secondary" onClick={() => navigate(-1)}>⬅ Back</Button>
+        <Button variant="primary" onClick={handlePrint}>🖨 Print Bill</Button>
       </div>
     </Container>
   );
