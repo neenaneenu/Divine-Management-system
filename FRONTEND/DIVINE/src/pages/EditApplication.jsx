@@ -16,6 +16,9 @@ const EditApplication = () => {
     bloodGroup: "",
     billNumber: "",
     amount: "",
+    testDate: "",       
+   leanersDate: "",
+    
   });
 
   useEffect(() => {
@@ -143,6 +146,25 @@ const EditApplication = () => {
                     onChange={handleChange}
                   />
                 </Form.Group>
+                <Form.Group className="mb-3">
+  <Form.Label>Test Date</Form.Label>
+  <Form.Control
+    type="date"
+    name="testDate"   // ✅ match state
+    value={formData.testDate ? formData.testDate.slice(0, 10) : ""}
+    onChange={handleChange}
+  />
+</Form.Group>
+
+<Form.Group className="mb-3">
+  <Form.Label>Learner Test</Form.Label>
+  <Form.Control
+    type="date"
+    name="leanersDate"   // ✅ match state
+    value={formData.leanersDate ? formData.leanersDate.slice(0, 10) : ""}
+    onChange={handleChange}
+  />
+</Form.Group>
 
                 <div className="d-flex justify-content-end gap-2">
                   <Button

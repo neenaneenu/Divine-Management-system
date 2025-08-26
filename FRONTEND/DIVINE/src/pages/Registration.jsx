@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 const DrivingSchoolForm = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +18,8 @@ const DrivingSchoolForm = () => {
     billNumber: "",
     amount: "",
     date: "",
+    testDate: "",       
+    leanersDate: "",   
   });
 
   const [photo, setPhoto] = useState(null);
@@ -59,7 +61,6 @@ const DrivingSchoolForm = () => {
 
       alert("Application Submitted Successfully ✅");
       console.log(res.data);
-      
     } catch (error) {
       console.error(error);
       alert("Error submitting application ❌");
@@ -69,12 +70,12 @@ const DrivingSchoolForm = () => {
   return (
     <div style={{ backgroundColor: "#002044", minHeight: "100vh", padding: "40px 0" }}>
       <Container>
-         {/* ✅ Application List Button */}
-          <div className="text-end mb-3">
-            <Button variant="success" onClick={() => navigate("/applications")}>
-              View Application List
-            </Button>
-          </div>
+        {/* ✅ Application List Button */}
+        <div className="text-end mb-3">
+          <Button variant="success" onClick={() => navigate("/applications")}>
+            View Application List
+          </Button>
+        </div>
         <div className="p-4 rounded shadow bg-white">
           <h2 className="text-center mb-4 text-dark">Driving School Application Form</h2>
           <Form onSubmit={handleSubmit}>
@@ -116,7 +117,7 @@ const DrivingSchoolForm = () => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Gardian</Form.Label>
+              <Form.Label>Guardian</Form.Label>
               <Form.Control
                 type="text"
                 name="fatherName"
@@ -189,22 +190,22 @@ const DrivingSchoolForm = () => {
                 </Form.Group>
               </Col>
               <Col md={6}>
-  <Form.Group className="mb-3">
-    <Form.Label>Class of Vehicle</Form.Label>
-    <Form.Select
-      name="vehicleClass"
-      value={formData.vehicleClass}
-      onChange={handleChange}
-    >
-      <option value="">-- Select Vehicle Class --</option>
-      <option value="TWO WHEELER">TWO WHEELER</option>
-      <option value="FOUR WHEELER">FOUR WHEELER</option>
-      <option value="CONDUCTOR LICENSE">CONDUCTOR LICENSE</option>
-      <option value="HEAVY LICENSE">HEAVY LICENSE</option>
-    </Form.Select>
-  </Form.Group>
-</Col>
-
+                <Form.Group className="mb-3">
+                  <Form.Label>Class of Vehicle</Form.Label>
+                  <Form.Select
+                    name="vehicleClass"
+                    value={formData.vehicleClass}
+                    onChange={handleChange}
+                  >
+                    <option value="">-- Select Vehicle Class --</option>
+                    <option value="LMV">LMV</option>
+                    <option value="MCWG">MCWG</option>
+                    <option value="LMV & MCWG">LMV & MCWG</option>
+                    <option value="CONDUCTOR LICENSE">CONDUCTOR LICENSE</option>
+                    <option value="HEAVY LICENSE">HEAVY LICENSE</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
             </Row>
 
             <Form.Group className="mb-3">
@@ -255,6 +256,32 @@ const DrivingSchoolForm = () => {
                     value={formData.amount}
                     onChange={handleChange}
                     placeholder="Enter Amount"
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            {/* ✅ Added Learners Date & Test Date */}
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Learners Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="learnersDate"
+                    value={formData.learnersDate}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Test Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="testDate"
+                    value={formData.testDate}
+                    onChange={handleChange}
                   />
                 </Form.Group>
               </Col>

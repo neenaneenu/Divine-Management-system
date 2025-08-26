@@ -19,6 +19,8 @@ export const createApplication = async (req, res) => {
       email,
       billNumber,  
       amount,
+      testDate,
+      leanersDate
     } = req.body;
 
     // Handle uploaded files
@@ -44,6 +46,8 @@ export const createApplication = async (req, res) => {
       licenseFile,
       billNumber,  
       amount,
+      testDate,
+      leanersDate
     });
 
     await application.save();

@@ -15,8 +15,11 @@ const applicationSchema = new mongoose.Schema({
   signature: { type: String },  // file path / URL
   billNumber: { type: String },
   amount: { type: Number },
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
+  testDate: {type: Date , default: Date.now},
+  leanersDate: {type: Date, default: Date.now}
 });
+
 
 const Application = mongoose.model("Application", applicationSchema);
 
