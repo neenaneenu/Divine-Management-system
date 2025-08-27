@@ -112,21 +112,35 @@ const EditApplication = () => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Vehicle Class</Form.Label>
-                  <Form.Control
-                    type="text"
+                  <Form.Select
                     name="vehicleClass"
                     value={formData.vehicleClass}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">-- Select Vehicle Class --</option>
+                    <option value="Two Wheeler">Two Wheeler</option>
+                    <option value="Four Wheeler">Four Wheeler</option>
+                    <option value="Conductor License">Conductor License</option>
+                    <option value="Heavy License">Heavy License</option>
+                  </Form.Select>
                 </Form.Group>
-                <Form.Group className="mb-3">
+                                <Form.Group className="mb-3">
                   <Form.Label>Blood Group</Form.Label>
-                  <Form.Control
-                    type="text"
+                  <Form.Select
                     name="bloodGroup"
                     value={formData.bloodGroup}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">-- Select Blood Group --</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                  </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Bill Number</Form.Label>
@@ -147,24 +161,24 @@ const EditApplication = () => {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3">
-  <Form.Label>Test Date</Form.Label>
-  <Form.Control
-    type="date"
-    name="testDate"   // ✅ match state
-    value={formData.testDate ? formData.testDate.slice(0, 10) : ""}
-    onChange={handleChange}
-  />
-</Form.Group>
+                  <Form.Label>Test Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="testDate"   // ✅ match state
+                    value={formData.testDate ? formData.testDate.slice(0, 10) : ""}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
 
-<Form.Group className="mb-3">
-  <Form.Label>Learner Test</Form.Label>
-  <Form.Control
-    type="date"
-    name="leanersDate"   // ✅ match state
-    value={formData.leanersDate ? formData.leanersDate.slice(0, 10) : ""}
-    onChange={handleChange}
-  />
-</Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Learner Test</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="leanersDate"  
+                    value={formData.leanersDate ? formData.leanersDate.slice(0, 10) : ""}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
 
                 <div className="d-flex justify-content-end gap-2">
                   <Button

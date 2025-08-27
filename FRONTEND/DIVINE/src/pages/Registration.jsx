@@ -208,16 +208,24 @@ const DrivingSchoolForm = () => {
               </Col>
             </Row>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Blood Group</Form.Label>
-              <Form.Control
-                type="text"
-                name="bloodGroup"
-                value={formData.bloodGroup}
-                onChange={handleChange}
-                placeholder="Enter Blood Group (Eg: O+)"
-              />
-            </Form.Group>
+           <Form.Group className="mb-3">
+  <Form.Label>Blood Group</Form.Label>
+  <Form.Select
+    name="bloodGroup"
+    value={formData.bloodGroup}
+    onChange={handleChange}
+  >
+    <option value="">-- Select Blood Group --</option>
+    <option value="A+">A+</option>
+    <option value="A-">A-</option>
+    <option value="B+">B+</option>
+    <option value="B-">B-</option>
+    <option value="O+">O+</option>
+    <option value="O-">O-</option>
+    <option value="AB+">AB+</option>
+    <option value="AB-">AB-</option>
+  </Form.Select>
+</Form.Group>
 
             <Row>
               <Col md={6}>
