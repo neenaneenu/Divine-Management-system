@@ -18,6 +18,8 @@ const EditApplication = () => {
     amount: "",
     testDate: "",       
    leanersDate: "",
+    SlNo  :"",
+   
     
   });
 
@@ -42,7 +44,7 @@ const EditApplication = () => {
     try {
       await axios.put(`http://localhost:3000/application/${id}`, formData);
       alert("✅ Application updated successfully!");
-      navigate("/applications"); // back to list
+      navigate("/applications"); 
     } catch (err) {
       console.error("❌ Error updating application:", err);
     }
@@ -73,6 +75,16 @@ const EditApplication = () => {
                     value={formData.applicationNumber}
                     onChange={handleChange}
                   />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Sl No</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="SlNo"
+                    value={formData.SlNo}
+                    onChange={handleChange}
+                  />
+                  
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Name</Form.Label>

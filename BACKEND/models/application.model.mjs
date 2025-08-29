@@ -17,7 +17,8 @@ const applicationSchema = new mongoose.Schema({
   amount: { type: Number },
   date: { type: Date, default: Date.now },
   testDate: {type: Date , default: Date.now},
-  leanersDate: {type: Date, default: Date.now}
+  leanersDate: {type: Date, default: Date.now},
+   SlNo: {type:Number}
 });
 
 

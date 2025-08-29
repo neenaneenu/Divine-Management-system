@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const DrivingSchoolForm = () => {
   const [formData, setFormData] = useState({
     applicationNumber: "",
+    SlNo :"",
     name: "",
     fatherName: "",
     dob: "",
@@ -80,6 +81,18 @@ const DrivingSchoolForm = () => {
           <h2 className="text-center mb-4 text-dark">Driving School Application Form</h2>
           <Form onSubmit={handleSubmit}>
             <Row>
+               <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>SL No</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name=" SlNo"
+                    value={formData.SlNo}
+                    onChange={handleChange}
+                    placeholder="Enter serial number"
+                  />
+                </Form.Group>
+              </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Application Number</Form.Label>

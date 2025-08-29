@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import logo from "../assets/logo.png"
 import license from "../assets/license.png"
 import billing from "../assets/billing.png"
-import Rc from "../assets/Rc.png"
+
 
 
 
@@ -64,17 +64,8 @@ const Home = () => {
             </Card>
           </Col>
 
-          {/* RC Icon */}
-          <Col md={3} sm={6} xs={12}>
-            <Card className="app-card text-center" onClick={() => handleSubmit("/rc")}>
-              <div className="icon-circle">
-                <img src={Rc} alt="RC" />
-              </div>
-              <Card.Body>
-                <Card.Title>RC</Card.Title>
-              </Card.Body>
-            </Card>
-          </Col>
+          
+          
 
         </Row>
       </Container>

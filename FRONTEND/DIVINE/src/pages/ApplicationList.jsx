@@ -65,6 +65,7 @@ const ApplicationList = () => {
               >
                 <tr>
                   <th>App No</th>
+                  <th>Sl No</th>
                   <th>Name</th>
                   <th>Father</th>
                   <th>DOB</th>
@@ -85,10 +86,19 @@ const ApplicationList = () => {
                   filteredApplications.map((app) => (
                     <tr key={app._id}>
                       <td>{app.applicationNumber}</td>
+                      <td>{app. SlNo}</td>
                       <td>{app.name}</td>
                       <td>{app.fatherName}</td>
-                      <td>{new Date(app.dob).toLocaleDateString()}</td>
-                      <td>{app.mobile1}</td>
+                      <td>{new Date(app.dob).toLocaleDateString()}</td>                        
+                      <td>
+                        {app.mobile1}
+                        {app.mobile2 && (
+                          <>
+                            <br /> 
+                            {app.mobile2}
+                          </>
+                        )}
+                      </td>
                       <td>{app.vehicleClass}</td>
                       <td>{app.bloodGroup}</td>
                       <td>
