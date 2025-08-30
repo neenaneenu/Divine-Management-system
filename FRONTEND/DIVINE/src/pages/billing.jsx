@@ -1,160 +1,198 @@
-import React, { useRef, useState } from "react";
-import { Button, Form, Container } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Table, Container, Button, Card, Form, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const BillingForm = () => {
-  const formRef = useRef();
+const BillingDetails = () => {
+  const [bills, setBills] = useState([]);
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBill, setSelectedBill] = useState(null);
+  const [newBillData, setNewBillData] = useState({ billAmount: "", billDate: "" });
+
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    billNo: "",
-    date: "",
-    name: "",
-    address: "",
-    phone: "",
-    item: "",
-    total: "",
-    advance: "",
-    balance: "",
-  });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    const fetchBills = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/application/");
+        setBills(res.data);
+      } catch (err) {
+        console.error("❌ Error fetching bills:", err);
+      }
+    };
+    fetchBills();
+  }, []);
+
+  // 🔎 Filter by Bill No or Application No
+  const filteredBills = bills.filter(
+    (bill) =>
+      bill.billNumber?.toLowerCase().includes(search.toLowerCase()) ||
+      bill.applicationNumber?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // 🔹 Open modal to add bill
+  const handleAddBill = (bill) => {
+    setSelectedBill(bill);
+    setNewBillData({ billAmount: "", billDate: "" });
+    setShowModal(true);
   };
 
-  const handlePrint = () => {
-    const printWindow = window.open("", "", "height=600,width=800");
+  // 🔹 Save new bill
+const handleSaveBill = async () => {
+  try {
+  await axios.post("http://localhost:3000/bills", {
+  billAmount: newBillData.billAmount,
+  billDate: newBillData.billDate,
+  applicationNumber: selectedBill?.applicationNumber,
+  name: selectedBill?.name
+});
+    alert("✅ New bill added successfully!");
+    setShowModal(false);
+    setNewBillData({ billAmount: "", billDate: "" });
 
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Print Bill</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              padding: 20px;
-            }
-            .bill-box {
-              border: 2px dashed #000;
-              padding: 20px;
-              width: 350px;
-              margin: auto;
-              background-color: #f8d7da;
-            }
-            h4 {
-              text-align: center;
-              margin: 0;
-              font-size: 20px;
-              font-weight: bold;
-            }
-            p {
-              text-align: center;
-              margin: 2px 0;
-              font-size: 12px;
-            }
-            table {
-              width: 100%;
-              margin-top: 10px;
-              border-collapse: collapse;
-            }
-            td {
-              padding: 4px;
-              font-size: 14px;
-            }
-            .label {
-              font-weight: bold;
-            }
-            .signature {
-              margin-top: 30px;
-              text-align: right;
-              font-size: 14px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="bill-box">
-            <h4>Divine Driving School</h4>
-            <p>Opp. Paravathani Furniture, Nilambur Road, MANJERI</p>
-            <table>
-              <tr><td class="label">No:</td><td>${formData.billNo}</td></tr>
-              <tr><td class="label">Date:</td><td>${formData.date}</td></tr>
-              <tr><td class="label">Name:</td><td>${formData.name}</td></tr>
-              <tr><td class="label">Address:</td><td>${formData.address}</td></tr>
-              <tr><td class="label">Phone:</td><td>${formData.phone}</td></tr>
-              <tr><td class="label">Item:</td><td>${formData.item}</td></tr>
-              <tr><td class="label">Total:</td><td>${formData.total}</td></tr>
-              <tr><td class="label">Advance:</td><td>${formData.advance}</td></tr>
-              <tr><td class="label">Balance:</td><td>${formData.balance}</td></tr>
-            </table>
-            <p class="signature">Signature: __________</p>
-          </div>
-        </body>
-      </html>
-    `);
+    // Refresh bills list
+    const res = await axios.get("http://localhost:3000/bills");
+    setBills(res.data);
 
-    printWindow.document.close();
-    printWindow.print();
-  };
+  } catch (err) {
+    console.error("❌ Error adding bill:", err);
+    alert("Failed to add bill");
+  }
+};
+
 
   return (
-    <Container className="p-4">
-      <div ref={formRef} className="border p-4 bg-light" style={{ width: "400px", margin: "auto" }}>
-        <h4 className="text-center fw-bold">Divine Driving School</h4>
-        <p className="text-center small mb-2">Opp. Paravathani Furniture, Nilambur Road, MANJERI</p>
+    <div style={{ minHeight: "100vh", padding: "40px 0", backgroundColor: "#002044" }}>
+      <Container fluid="lg" style={{ maxWidth: "95%", margin: "0 auto", overflowX: "hidden" }}>
+        <Card className="shadow-lg rounded-4 p-4">
+          {/* 🔹 Header */}
+          <div
+            className="d-flex justify-content-between align-items-center mb-4 p-3 rounded"
+            style={{ backgroundColor: "#f8f9fa" }}
+          >
+            <h2 className="mb-0 text-dark fw-bold">💳 Billing Details</h2>
+            <div className="d-flex gap-2">
+              <Button variant="outline-primary" onClick={() => navigate("/applications")}>
+                ⬅ Back
+              </Button>
+              <Button variant="success" onClick={() => navigate("/billing/new")}>
+                ➕ New Bill
+              </Button>
+            </div>
+          </div>
 
-        <Form>
-          <Form.Group className="mt-2">
-            <Form.Label>Bill No</Form.Label>
-            <Form.Control size="sm" name="billNo" value={formData.billNo} onChange={handleChange} />
-          </Form.Group>
+          {/* 🔍 Search Bar */}
+          <Form className="mb-4">
+            <Form.Control
+              type="text"
+              placeholder="🔎 Search by Bill No or Application No..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Form>
 
-          <Form.Group className="mt-2">
-            <Form.Label>Date</Form.Label>
-            <Form.Control type="date" size="sm" name="date" value={formData.date} onChange={handleChange} />
-          </Form.Group>
+          {/* 📊 Billing Table */}
+          <div style={{ overflowX: "auto" }}>
+            <Table bordered hover responsive className="align-middle shadow-sm">
+              <thead className="table-dark" style={{ position: "sticky", top: 0, zIndex: 2 }}>
+                <tr>
+                  <th>Bill No</th>
+                  <th>Application No</th>
+                  <th>Name</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Payment Mode</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredBills.length > 0 ? (
+                  filteredBills.map((bill) => (
+                    <tr key={bill._id}>
+                      <td>{bill.billNumber || "—"}</td>
+                      <td>{bill.applicationNumber}</td>
+                      <td>{bill.name}</td>
+                      <td>{bill.billDate ? new Date(bill.billDate).toLocaleDateString() : "—"}</td>
+                      <td>₹ {bill.billAmount || "0"}</td>
+                      <td>{bill.paymentMode || "Cash"}</td>
+                      <td>
+                        <div className="d-flex gap-2">
+                          <Button variant="info" size="sm" onClick={() => handleAddBill(bill)}>
+                            ➕ Add Bill
+                          </Button>
+                          <Button
+                            variant="warning"
+                            size="sm"
+                            onClick={() => navigate(`/billing/edit/${bill._id}`)}
+                          >
+                            ✏ Edit
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="text-center text-muted py-4">
+                      No billing records found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          </div>
+        </Card>
+      </Container>
 
-          <Form.Group className="mt-2">
-            <Form.Label>Name</Form.Label>
-            <Form.Control size="sm" name="name" value={formData.name} onChange={handleChange} />
-          </Form.Group>
+      {/* 🔹 Add Bill Modal */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>➕ Add Bill</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedBill && (
+            <>
+              <p>
+                <strong>Application No:</strong> {selectedBill.applicationNumber}
+              </p>
+              <p>
+                <strong>Name:</strong> {selectedBill.name}
+              </p>
 
-          <Form.Group className="mt-2">
-            <Form.Label>Address</Form.Label>
-            <Form.Control size="sm" name="address" value={formData.address} onChange={handleChange} />
-          </Form.Group>
-
-          <Form.Group className="mt-2">
-            <Form.Label>Phone</Form.Label>
-            <Form.Control size="sm" name="phone" value={formData.phone} onChange={handleChange} />
-          </Form.Group>
-
-          <Form.Group className="mt-2">
-            <Form.Label>Item</Form.Label>
-            <Form.Control size="sm" name="item" value={formData.item} onChange={handleChange} />
-          </Form.Group>
-
-          <Form.Group className="mt-2">
-            <Form.Label>Total</Form.Label>
-            <Form.Control size="sm" name="total" value={formData.total} onChange={handleChange} />
-          </Form.Group>
-
-          <Form.Group className="mt-2">
-            <Form.Label>Advance</Form.Label>
-            <Form.Control size="sm" name="advance" value={formData.advance} onChange={handleChange} />
-          </Form.Group>
-
-          <Form.Group className="mt-2">
-            <Form.Label>Balance</Form.Label>
-            <Form.Control size="sm" name="balance" value={formData.balance} onChange={handleChange} />
-          </Form.Group>
-        </Form>
-      </div>
-
-      <div className="text-center mt-3 d-flex justify-content-center gap-2">
-        <Button variant="secondary" onClick={() => navigate(-1)}>⬅ Back</Button>
-        <Button variant="primary" onClick={handlePrint}>🖨 Print Bill</Button>
-      </div>
-    </Container>
+              <Form>
+                <Form.Group className="mb-3">
+                  <Form.Label>Amount</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={newBillData.billAmount}
+                    onChange={(e) => setNewBillData({ ...newBillData, billAmount: e.target.value })}
+                    placeholder="Enter amount"
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={newBillData.billDate}
+                    onChange={(e) => setNewBillData({ ...newBillData, billDate: e.target.value })}
+                  />
+                </Form.Group>
+              </Form>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="success" onClick={handleSaveBill}>
+            💾 Save Bill
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 };
 
-export default BillingForm;
+export default BillingDetails;

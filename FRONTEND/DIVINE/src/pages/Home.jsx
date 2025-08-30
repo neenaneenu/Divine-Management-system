@@ -54,12 +54,12 @@ const Home = () => {
 
           {/* Billing Icon */}
           <Col md={3} sm={6} xs={12}>
-            <Card className="app-card text-center" onClick={() => handleSubmit("/billing")}>
+            <Card className="app-card text-center" onClick={() => handleSubmit("/applications")}>
               <div className="icon-circle">
                 <img src={billing} alt="Billing" />
               </div>
               <Card.Body>
-                <Card.Title>Billing</Card.Title>
+                <Card.Title>Application List</Card.Title>
               </Card.Body>
             </Card>
           </Col>

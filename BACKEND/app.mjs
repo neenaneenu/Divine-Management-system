@@ -4,6 +4,7 @@ import cors from "cors"
 import dbConnect from "./config/db.config.mjs"
 import userRoute from "./routes/user.route.mjs"
 import applicationRoutes from "./routes/applcation.route.mjs"
+import  billRoutes from "./routes/bill.route.mjs"
 
 
 env.config() 
@@ -20,6 +21,8 @@ app.use(cors())
 app.use("/api/users", userRoute)
 app.use("/uploads", express.static("uploads"));
 app.use("/application", applicationRoutes);
+app.use("/bills", billRoutes);
+
 
 
 app.listen(process.env.PORT || 3000, err => {

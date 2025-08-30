@@ -28,30 +28,53 @@ const ApplicationList = () => {
   );
 
   return (
-    <div style={{ minHeight: "100vh", padding: "40px 0", backgroundColor: "#002044" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        padding: "40px 0",
+        backgroundColor: "#002044",
+      }}
+    >
       <Container
-  fluid="lg"
-  style={{ maxWidth: "95%", margin: "0 auto",   overflowX: "hidden"   }}>
-        <Card className="shadow-lg rounded-4 p-4">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h2 className="mb-0 text-dark">📄 Registered Applications</h2>
-            <Button variant="secondary" onClick={() => navigate("/home")}>
-              ⬅ Back
-            </Button>
+        fluid="lg"
+        style={{ maxWidth: "95%", margin: "0 auto", overflowX: "hidden" }}
+      >
+        <Card className="shadow-lg rounded-4 p-4 border-0">
+          {/* 🔹 Header Section */}
+          <div
+            className="d-flex justify-content-between align-items-center mb-4 p-3 rounded-3"
+            style={{ backgroundColor: "#f8f9fa" }}
+          >
+            <h2 className="mb-0 text-dark fw-bold">
+              📄 Registered Applications
+            </h2>
+
+            <div className="d-flex gap-2">
+              <Button
+                variant="outline-secondary"
+                onClick={() => navigate("/register")}
+              >
+                ⬅ Back
+              </Button>
+              <Button variant="outline-secondary" onClick={() => navigate("/billing")}>
+                💳 Bill
+              </Button>
+            </div>
           </div>
 
           {/* 🔍 Search Bar */}
           <Form className="mb-4">
             <Form.Control
               type="text"
-              placeholder="Search by Application No or Name..."
+              placeholder="🔎 Search by Application No or Name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              className="shadow-sm"
             />
           </Form>
 
           {/* ✅ Better Table */}
-          <div style={{ overflowX: "hidden" }}>
+          <div style={{ overflowX: "auto" }}>
             <Table
               bordered
               hover
@@ -86,15 +109,15 @@ const ApplicationList = () => {
                   filteredApplications.map((app) => (
                     <tr key={app._id}>
                       <td>{app.applicationNumber}</td>
-                      <td>{app. SlNo}</td>
+                      <td>{app.SlNo}</td>
                       <td>{app.name}</td>
                       <td>{app.fatherName}</td>
-                      <td>{new Date(app.dob).toLocaleDateString()}</td>                        
+                      <td>{new Date(app.dob).toLocaleDateString()}</td>
                       <td>
                         {app.mobile1}
                         {app.mobile2 && (
                           <>
-                            <br /> 
+                            <br />
                             {app.mobile2}
                           </>
                         )}
@@ -106,7 +129,7 @@ const ApplicationList = () => {
                           <img
                             src={`http://localhost:3000/uploads/${app.photo}`}
                             alt="photo"
-                            className="rounded"
+                            className="rounded shadow-sm"
                             width="45"
                             height="45"
                             style={{ objectFit: "cover" }}
@@ -118,7 +141,7 @@ const ApplicationList = () => {
                           <img
                             src={`http://localhost:3000/uploads/${app.signature}`}
                             alt="signature"
-                            className="rounded"
+                            className="rounded shadow-sm"
                             width="45"
                             height="45"
                             style={{ objectFit: "cover" }}
@@ -126,22 +149,24 @@ const ApplicationList = () => {
                         )}
                       </td>
                       <td>{app.billNumber}</td>
-                      <td>{app.amount}</td>
+                      <td className="fw-bold text-success">{app.amount}</td>
                       <td>
                         {app.testDate
                           ? new Date(app.testDate).toLocaleDateString()
                           : "Not Assigned"}
                       </td>
-                     <td>
-  {app.leanersDate && !isNaN(new Date(app.leanersDate))
-    ? new Date(app.leanersDate).toLocaleDateString()
-    : "Not Assigned"}
-</td>
+                      <td>
+                        {app.leanersDate && !isNaN(new Date(app.leanersDate))
+                          ? new Date(app.leanersDate).toLocaleDateString()
+                          : "Not Assigned"}
+                      </td>
                       <td>
                         <Button
                           variant="warning"
                           size="sm"
-                          onClick={() => navigate(`/application/edit/${app._id}`)}
+                          onClick={() =>
+                            navigate(`/application/edit/${app._id}`)
+                          }
                         >
                           ✏ Edit
                         </Button>
@@ -150,7 +175,7 @@ const ApplicationList = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="14" className="text-center text-muted py-4">
+                    <td colSpan="15" className="text-center text-muted py-4">
                       No applications found
                     </td>
                   </tr>
