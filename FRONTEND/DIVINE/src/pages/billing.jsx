@@ -4,63 +4,75 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const BillingDetails = () => {
-  const [bills, setBills] = useState([]);
+  const [applications, setApplications] = useState([]); 
+  const [bills, setBills] = useState([]); // ✅ State for all bills
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [selectedBill, setSelectedBill] = useState(null);
+  const [selectedApp, setSelectedApp] = useState(null);
   const [newBillData, setNewBillData] = useState({ billAmount: "", billDate: "" });
 
   const navigate = useNavigate();
 
+  // 🔹 Fetch applications
   useEffect(() => {
-    const fetchBills = async () => {
+    const fetchApplications = async () => {
       try {
         const res = await axios.get("http://localhost:3000/application/");
+        setApplications(res.data);
+      } catch (err) {
+        console.error("❌ Error fetching applications:", err);
+      }
+    };
+
+    const fetchBills = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/bills");
         setBills(res.data);
       } catch (err) {
         console.error("❌ Error fetching bills:", err);
       }
     };
+
+    fetchApplications();
     fetchBills();
   }, []);
 
-  // 🔎 Filter by Bill No or Application No
-  const filteredBills = bills.filter(
-    (bill) =>
-      bill.billNumber?.toLowerCase().includes(search.toLowerCase()) ||
-      bill.applicationNumber?.toLowerCase().includes(search.toLowerCase())
-  );
+  // 🔎 Filter applications
+ // 🔎 Filter applications by applicationNumber OR name
+const filteredApps = applications.filter((app) =>
+  app.applicationNumber?.toLowerCase().includes(search.toLowerCase()) ||
+  app.name?.toLowerCase().includes(search.toLowerCase())
+);
 
   // 🔹 Open modal to add bill
-  const handleAddBill = (bill) => {
-    setSelectedBill(bill);
+  const handleAddBill = (app) => {
+    setSelectedApp(app);
     setNewBillData({ billAmount: "", billDate: "" });
     setShowModal(true);
   };
 
   // 🔹 Save new bill
-const handleSaveBill = async () => {
-  try {
-  await axios.post("http://localhost:3000/bills", {
-  billAmount: newBillData.billAmount,
-  billDate: newBillData.billDate,
-  applicationNumber: selectedBill?.applicationNumber,
-  name: selectedBill?.name
-});
-    alert("✅ New bill added successfully!");
-    setShowModal(false);
-    setNewBillData({ billAmount: "", billDate: "" });
+  const handleSaveBill = async () => {
+    try {
+      await axios.post("http://localhost:3000/bills", {
+        billAmount: newBillData.billAmount,
+        billDate: newBillData.billDate,
+        applicationNumber: selectedApp?.applicationNumber,
+        name: selectedApp?.name,
+      });
 
-    // Refresh bills list
-    const res = await axios.get("http://localhost:3000/bills");
-    setBills(res.data);
+      alert("✅ Bill added successfully!");
+      setShowModal(false);
+      setNewBillData({ billAmount: "", billDate: "" });
 
-  } catch (err) {
-    console.error("❌ Error adding bill:", err);
-    alert("Failed to add bill");
-  }
-};
-
+      // 🔄 Refresh bills list
+      const res = await axios.get("http://localhost:3000/bills");
+      setBills(res.data);
+    } catch (err) {
+      console.error("❌ Error adding bill:", err);
+      alert("Failed to add bill");
+    }
+  };
 
   return (
     <div style={{ minHeight: "100vh", padding: "40px 0", backgroundColor: "#002044" }}>
@@ -72,70 +84,92 @@ const handleSaveBill = async () => {
             style={{ backgroundColor: "#f8f9fa" }}
           >
             <h2 className="mb-0 text-dark fw-bold">💳 Billing Details</h2>
-            <div className="d-flex gap-2">
-              <Button variant="outline-primary" onClick={() => navigate("/applications")}>
-                ⬅ Back
-              </Button>
-              <Button variant="success" onClick={() => navigate("/billing/new")}>
-                ➕ New Bill
-              </Button>
-            </div>
+            <Button variant="outline-primary" onClick={() => navigate("/applications")}>
+              ⬅ Back
+            </Button>
           </div>
 
           {/* 🔍 Search Bar */}
           <Form className="mb-4">
             <Form.Control
               type="text"
-              placeholder="🔎 Search by Bill No or Application No..."
+              placeholder="🔎 Search by Application No..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </Form>
 
-          {/* 📊 Billing Table */}
+          {/* 📊 Applications Table */}
+          <h4 className="fw-bold mt-3 mb-2">📌 Applications</h4>
           <div style={{ overflowX: "auto" }}>
             <Table bordered hover responsive className="align-middle shadow-sm">
-              <thead className="table-dark" style={{ position: "sticky", top: 0, zIndex: 2 }}>
+              <thead className="table-dark">
                 <tr>
-                  <th>Bill No</th>
                   <th>Application No</th>
                   <th>Name</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Payment Mode</th>
-                  <th>Actions</th>
+                  <th>Father Name</th>
+                  <th>DOB</th>
+                  <th>Mobile</th>
+                  <th>Address</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredBills.length > 0 ? (
-                  filteredBills.map((bill) => (
-                    <tr key={bill._id}>
-                      <td>{bill.billNumber || "—"}</td>
-                      <td>{bill.applicationNumber}</td>
-                      <td>{bill.name}</td>
-                      <td>{bill.billDate ? new Date(bill.billDate).toLocaleDateString() : "—"}</td>
-                      <td>₹ {bill.billAmount || "0"}</td>
-                      <td>{bill.paymentMode || "Cash"}</td>
+                {filteredApps.length > 0 ? (
+                  filteredApps.map((app) => (
+                    <tr key={app._id}>
+                      <td>{app.applicationNumber}</td>
+                      <td>{app.name}</td>
+                      <td>{app.fatherName}</td>
+                      <td>{app.dob ? new Date(app.dob).toLocaleDateString() : "—"}</td>
+                      <td>{app.mobile1}</td>
+                      <td>{app.address}</td>
                       <td>
-                        <div className="d-flex gap-2">
-                          <Button variant="info" size="sm" onClick={() => handleAddBill(bill)}>
-                            ➕ Add Bill
-                          </Button>
-                          <Button
-                            variant="warning"
-                            size="sm"
-                            onClick={() => navigate(`/billing/edit/${bill._id}`)}
-                          >
-                            ✏ Edit
-                          </Button>
-                        </div>
+                        <Button variant="success" size="sm" onClick={() => handleAddBill(app)}>
+                          ➕ Add Bill
+                        </Button>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td colSpan="7" className="text-center text-muted py-4">
-                      No billing records found
+                      No applications found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          </div>
+
+          {/* 📊 Bills Table */}
+          <h4 className="fw-bold mt-5 mb-2">📑 All Bills</h4>
+          <div style={{ overflowX: "auto" }}>
+            <Table bordered hover responsive className="align-middle shadow-sm">
+              <thead className="table-secondary">
+                <tr>
+                  
+                  <th>Application No</th>
+                  <th>Name</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bills.length > 0 ? (
+                  bills.map((bill) => (
+                    <tr key={bill._id}>
+                      
+                      <td>{bill.applicationNumber}</td>
+                      <td>{bill.name}</td>
+                      <td>₹{bill.billAmount}</td>
+                      <td>{bill.billDate ? new Date(bill.billDate).toLocaleDateString() : "—"}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center text-muted py-4">
+                      No bills found
                     </td>
                   </tr>
                 )}
@@ -151,13 +185,13 @@ const handleSaveBill = async () => {
           <Modal.Title>➕ Add Bill</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {selectedBill && (
+          {selectedApp && (
             <>
               <p>
-                <strong>Application No:</strong> {selectedBill.applicationNumber}
+                <strong>Application No:</strong> {selectedApp.applicationNumber}
               </p>
               <p>
-                <strong>Name:</strong> {selectedBill.name}
+                <strong>Name:</strong> {selectedApp.name}
               </p>
 
               <Form>
