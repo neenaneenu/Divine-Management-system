@@ -38,10 +38,15 @@ const BillingDetails = () => {
   }, []);
 
   // 🔎 Filter applications
- // 🔎 Filter applications by applicationNumber OR name
-const filteredApps = applications.filter((app) =>
-  app.applicationNumber?.toLowerCase().includes(search.toLowerCase()) ||
-  app.name?.toLowerCase().includes(search.toLowerCase())
+
+  const filteredApps = applications.filter((app) =>
+    app.applicationNumber?.toLowerCase().includes(search.toLowerCase()) ||
+    app.name?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const filteredBills = bills.filter((bill) =>
+  bill.applicationNumber?.toLowerCase().includes(search.toLowerCase()) ||
+  bill.name?.toLowerCase().includes(search.toLowerCase())
 );
 
   // 🔹 Open modal to add bill
@@ -110,7 +115,7 @@ const filteredApps = applications.filter((app) =>
                   <th>Father Name</th>
                   <th>DOB</th>
                   <th>Mobile</th>
-                  <th>Address</th>
+                  <th>amout</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -123,7 +128,8 @@ const filteredApps = applications.filter((app) =>
                       <td>{app.fatherName}</td>
                       <td>{app.dob ? new Date(app.dob).toLocaleDateString() : "—"}</td>
                       <td>{app.mobile1}</td>
-                      <td>{app.address}</td>
+                      <td>{app.amount}</td>
+                      
                       <td>
                         <Button variant="success" size="sm" onClick={() => handleAddBill(app)}>
                           ➕ Add Bill
@@ -155,25 +161,25 @@ const filteredApps = applications.filter((app) =>
                   <th>Date</th>
                 </tr>
               </thead>
-              <tbody>
-                {bills.length > 0 ? (
-                  bills.map((bill) => (
-                    <tr key={bill._id}>
-                      
-                      <td>{bill.applicationNumber}</td>
-                      <td>{bill.name}</td>
-                      <td>₹{bill.billAmount}</td>
-                      <td>{bill.billDate ? new Date(bill.billDate).toLocaleDateString() : "—"}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="text-center text-muted py-4">
-                      No bills found
-                    </td>
+            <tbody>
+              {filteredBills.length > 0 ? (
+                filteredBills.map((bill) => (
+                  <tr key={bill._id}>
+                    <td>{bill.applicationNumber}</td>
+                    <td>{bill.name}</td>
+                    <td>₹{bill.billAmount}</td>
+                    <td>{bill.billDate ? new Date(bill.billDate).toLocaleDateString() : "—"}</td>
                   </tr>
-                )}
-              </tbody>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center text-muted py-4">
+                    No bills found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+
             </Table>
           </div>
         </Card>
