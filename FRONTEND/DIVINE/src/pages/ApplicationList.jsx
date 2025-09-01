@@ -52,7 +52,7 @@ const ApplicationList = () => {
             <div className="d-flex gap-2">
               <Button
                 variant="outline-secondary"
-                onClick={() => navigate("/register")}
+                onClick={() => navigate("/Home")}
               >
                 ⬅ Back
               </Button>

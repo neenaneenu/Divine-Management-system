@@ -62,8 +62,9 @@ const BillingDetails = () => {
       await axios.post("http://localhost:3000/bills", {
         billAmount: newBillData.billAmount,
         billDate: newBillData.billDate,
-        applicationNumber: selectedApp?.applicationNumber,
+        billNumber: selectedApp?.billNumber,
         name: selectedApp?.name,
+
       });
 
       alert("✅ Bill added successfully!");
@@ -89,7 +90,7 @@ const BillingDetails = () => {
             style={{ backgroundColor: "#f8f9fa" }}
           >
             <h2 className="mb-0 text-dark fw-bold">💳 Billing Details</h2>
-            <Button variant="outline-primary" onClick={() => navigate("/applications")}>
+            <Button variant="outline-primary" onClick={() => navigate("/Home")}>
               ⬅ Back
             </Button>
           </div>
@@ -110,7 +111,7 @@ const BillingDetails = () => {
             <Table bordered hover responsive className="align-middle shadow-sm">
               <thead className="table-dark">
                 <tr>
-                  <th>Application No</th>
+                  <th>Bill Number</th>
                   <th>Name</th>
                   <th>Father Name</th>
                   <th>DOB</th>
@@ -123,7 +124,7 @@ const BillingDetails = () => {
                 {filteredApps.length > 0 ? (
                   filteredApps.map((app) => (
                     <tr key={app._id}>
-                      <td>{app.applicationNumber}</td>
+                      <td>{app.billNumber}</td>
                       <td>{app.name}</td>
                       <td>{app.fatherName}</td>
                       <td>{app.dob ? new Date(app.dob).toLocaleDateString() : "—"}</td>
@@ -155,7 +156,7 @@ const BillingDetails = () => {
               <thead className="table-secondary">
                 <tr>
                   
-                  <th>Application No</th>
+                  <th>Bill Number</th>
                   <th>Name</th>
                   <th>Amount</th>
                   <th>Date</th>
@@ -165,7 +166,7 @@ const BillingDetails = () => {
               {filteredBills.length > 0 ? (
                 filteredBills.map((bill) => (
                   <tr key={bill._id}>
-                    <td>{bill.applicationNumber}</td>
+                    <td>{bill.billNumber}</td>
                     <td>{bill.name}</td>
                     <td>₹{bill.billAmount}</td>
                     <td>{bill.billDate ? new Date(bill.billDate).toLocaleDateString() : "—"}</td>
@@ -194,7 +195,7 @@ const BillingDetails = () => {
           {selectedApp && (
             <>
               <p>
-                <strong>Application No:</strong> {selectedApp.applicationNumber}
+                <strong>Bill Number</strong> {selectedApp.billNumber}
               </p>
               <p>
                 <strong>Name:</strong> {selectedApp.name}

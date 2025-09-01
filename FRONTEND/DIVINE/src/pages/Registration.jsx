@@ -86,7 +86,7 @@ const DrivingSchoolForm = () => {
                   <Form.Label>SL No</Form.Label>
                   <Form.Control
                     type="text"
-                    name=" SlNo"
+                    name="SlNo"
                     value={formData.SlNo}
                     onChange={handleChange}
                     placeholder="Enter serial number"

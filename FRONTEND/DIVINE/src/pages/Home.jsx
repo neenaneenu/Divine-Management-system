@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 import logo from "../assets/logo.png"
 import license from "../assets/license.png"
 import billing from "../assets/billing.png"
+import reg from "../assets/reg.png"
+import app from "../assets/app.png"
 
 
 
@@ -44,10 +46,10 @@ const Home = () => {
           <Col md={3} sm={6} xs={12}>
             <Card className="app-card text-center" onClick={() => handleSubmit("/register")}>
               <div className="icon-circle">
-                <img src={license} alt="License" />
+                <img src={reg} alt="License" />
               </div>
               <Card.Body>
-                <Card.Title>License</Card.Title>
+                <Card.Title>Registration</Card.Title>
               </Card.Body>
             </Card>
           </Col>
@@ -56,10 +58,21 @@ const Home = () => {
           <Col md={3} sm={6} xs={12}>
             <Card className="app-card text-center" onClick={() => handleSubmit("/applications")}>
               <div className="icon-circle">
-                <img src={billing} alt="Billing" />
+                <img src={app} alt="Billing" />
               </div>
               <Card.Body>
                 <Card.Title>Application List</Card.Title>
+              </Card.Body>
+            </Card>
+          </Col>
+
+           <Col md={3} sm={6} xs={12}>
+            <Card className="app-card text-center" onClick={() => handleSubmit("/billing")}>
+              <div className="icon-circle">
+                <img src={billing} alt="Billing" />
+              </div>
+              <Card.Body>
+                <Card.Title>Billing</Card.Title>
               </Card.Body>
             </Card>
           </Col>
