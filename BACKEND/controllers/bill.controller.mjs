@@ -3,8 +3,8 @@ import { billCollection } from "../models/bill.model.mjs";
 // ➕ Add Bill
 export const addBill = async (req, res) => {
   try {
-    const { billDate, billAmount,billNumber, name } = req.body;
-    const bill = new billCollection({ billDate, billAmount, billNumber, name });
+    const { billDate, billAmount,billNumber, name, mobile1,mobile2} = req.body;
+    const bill = new billCollection({ billDate, billAmount, billNumber, name ,mobile1,mobile2});
     await bill.save();
     res.status(201).json(bill);
   } catch (err) {

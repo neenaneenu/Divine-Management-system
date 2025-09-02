@@ -41,13 +41,16 @@ const BillingDetails = () => {
 
   const filteredApps = applications.filter((app) =>
     app.applicationNumber?.toLowerCase().includes(search.toLowerCase()) ||
-    app.name?.toLowerCase().includes(search.toLowerCase())
+    app.name?.toLowerCase().includes(search.toLowerCase()) ||
+    app.mobile1?.toLowerCase().includes(search.toLowerCase())
   );
 
-  const filteredBills = bills.filter((bill) =>
+ const filteredBills = bills.filter((bill) =>
   bill.applicationNumber?.toLowerCase().includes(search.toLowerCase()) ||
-  bill.name?.toLowerCase().includes(search.toLowerCase())
+  bill.name?.toLowerCase().includes(search.toLowerCase()) ||
+  bill.mobile1?.toLowerCase().includes(search.toLowerCase())
 );
+
 
   // 🔹 Open modal to add bill
   const handleAddBill = (app) => {
@@ -64,6 +67,8 @@ const BillingDetails = () => {
         billDate: newBillData.billDate,
         billNumber: selectedApp?.billNumber,
         name: selectedApp?.name,
+        mobile1: selectedApp?.mobile1,
+        mobile2: selectedApp?.mobile2,
 
       });
 
@@ -128,7 +133,13 @@ const BillingDetails = () => {
                       <td>{app.name}</td>
                       <td>{app.fatherName}</td>
                       <td>{app.dob ? new Date(app.dob).toLocaleDateString() : "—"}</td>
-                      <td>{app.mobile1}</td>
+                      <td> {app.mobile1}
+                        {app.mobile2 && (
+                          <>
+                            <br />
+                            {app.mobile2}
+                          </>
+                        )}</td>
                       <td>{app.amount}</td>
                       
                       <td>
@@ -158,8 +169,10 @@ const BillingDetails = () => {
                   
                   <th>Bill Number</th>
                   <th>Name</th>
+                  <th>phone Number</th>
                   <th>Amount</th>
                   <th>Date</th>
+
                 </tr>
               </thead>
             <tbody>
@@ -168,6 +181,15 @@ const BillingDetails = () => {
                   <tr key={bill._id}>
                     <td>{bill.billNumber}</td>
                     <td>{bill.name}</td>
+                    <td>
+                      {bill.mobile1}
+                      {bill.mobile2 && (
+                        <>
+                          <br />
+                          {bill.mobile2}
+                        </>
+                      )}
+                    </td>
                     <td>₹{bill.billAmount}</td>
                     <td>{bill.billDate ? new Date(bill.billDate).toLocaleDateString() : "—"}</td>
                   </tr>
@@ -199,6 +221,9 @@ const BillingDetails = () => {
               </p>
               <p>
                 <strong>Name:</strong> {selectedApp.name}
+              </p>
+              <p>
+                <strong>mobile number</strong>{selectedApp.mobile1}
               </p>
 
               <Form>

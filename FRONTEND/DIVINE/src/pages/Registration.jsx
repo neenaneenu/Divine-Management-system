@@ -73,6 +73,9 @@ const DrivingSchoolForm = () => {
       <Container>
         {/* ✅ Application List Button */}
         <div className="text-end mb-3">
+          <Button variant="secondary"onClick={() => navigate("/Home")} >
+             Back
+           </Button>
           <Button variant="success" onClick={() => navigate("/applications")}>
             View Application List
           </Button>
@@ -221,24 +224,24 @@ const DrivingSchoolForm = () => {
               </Col>
             </Row>
 
-           <Form.Group className="mb-3">
-  <Form.Label>Blood Group</Form.Label>
-  <Form.Select
-    name="bloodGroup"
-    value={formData.bloodGroup}
-    onChange={handleChange}
-  >
-    <option value="">-- Select Blood Group --</option>
-    <option value="A+">A+</option>
-    <option value="A-">A-</option>
-    <option value="B+">B+</option>
-    <option value="B-">B-</option>
-    <option value="O+">O+</option>
-    <option value="O-">O-</option>
-    <option value="AB+">AB+</option>
-    <option value="AB-">AB-</option>
-  </Form.Select>
-</Form.Group>
+            <Form.Group className="mb-3">
+            <Form.Label>Blood Group</Form.Label>
+            <Form.Select
+              name="bloodGroup"
+              value={formData.bloodGroup}
+              onChange={handleChange}
+            >
+              <option value="">-- Select Blood Group --</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </Form.Select>
+          </Form.Group>
 
             <Row>
               <Col md={6}>
@@ -290,7 +293,7 @@ const DrivingSchoolForm = () => {
                   <Form.Control
                     type="date"
                     name="learnersDate"
-                    value={formData.learnersDate}
+                    value={formData.leanersDate}
                     onChange={handleChange}
                   />
                 </Form.Group>

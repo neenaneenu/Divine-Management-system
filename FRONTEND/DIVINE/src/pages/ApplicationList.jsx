@@ -108,7 +108,8 @@ const ApplicationList = () => {
                 {filteredApplications.length > 0 ? (
                   filteredApplications.map((app) => (
                     <tr key={app._id}>
-                      <td>{app.applicationNumber}</td>
+                      <td>{app.applicationNumber || "Not Assigned"}</td>
+
                       <td>{app.SlNo}</td>
                       <td>{app.name}</td>
                       <td>{app.fatherName}</td>

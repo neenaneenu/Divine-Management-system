@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const applicationSchema = new mongoose.Schema({
-  applicationNumber: { type: String, required: true },
+  applicationNumber: { type: String,  },
   name: { type: String, required: true },
   fatherName: { type: String, required: true },
   dob: { type: Date, required: true },
