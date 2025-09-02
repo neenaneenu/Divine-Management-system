@@ -77,6 +77,18 @@ const Home = () => {
             </Card>
           </Col>
 
+          <Col md={3} sm={6} xs={12}>
+            <Card className="app-card text-center" onClick={() => handleSubmit("/bills")}>
+              <div className="icon-circle">
+                <img src={billing} alt="Billing" />
+              </div>
+              <Card.Body>
+                <Card.Title>view Bills</Card.Title>
+              </Card.Body>
+            </Card>
+          </Col>
+
+
           
           
 

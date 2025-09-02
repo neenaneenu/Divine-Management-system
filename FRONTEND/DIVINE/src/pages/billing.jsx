@@ -45,11 +45,6 @@ const BillingDetails = () => {
     app.mobile1?.toLowerCase().includes(search.toLowerCase())
   );
 
- const filteredBills = bills.filter((bill) =>
-  bill.applicationNumber?.toLowerCase().includes(search.toLowerCase()) ||
-  bill.name?.toLowerCase().includes(search.toLowerCase()) ||
-  bill.mobile1?.toLowerCase().includes(search.toLowerCase())
-);
 
 
   // 🔹 Open modal to add bill
@@ -98,6 +93,10 @@ const BillingDetails = () => {
             <Button variant="outline-primary" onClick={() => navigate("/Home")}>
               ⬅ Back
             </Button>
+            <Button variant="info" onClick={() => navigate("/bills")}>
+  📑 View All Bills
+</Button>
+
           </div>
 
           {/* 🔍 Search Bar */}
@@ -161,50 +160,7 @@ const BillingDetails = () => {
           </div>
 
           {/* 📊 Bills Table */}
-          <h4 className="fw-bold mt-5 mb-2">📑 All Bills</h4>
-          <div style={{ overflowX: "auto" }}>
-            <Table bordered hover responsive className="align-middle shadow-sm">
-              <thead className="table-secondary">
-                <tr>
-                  
-                  <th>Bill Number</th>
-                  <th>Name</th>
-                  <th>phone Number</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-
-                </tr>
-              </thead>
-            <tbody>
-              {filteredBills.length > 0 ? (
-                filteredBills.map((bill) => (
-                  <tr key={bill._id}>
-                    <td>{bill.billNumber}</td>
-                    <td>{bill.name}</td>
-                    <td>
-                      {bill.mobile1}
-                      {bill.mobile2 && (
-                        <>
-                          <br />
-                          {bill.mobile2}
-                        </>
-                      )}
-                    </td>
-                    <td>₹{bill.billAmount}</td>
-                    <td>{bill.billDate ? new Date(bill.billDate).toLocaleDateString() : "—"}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="text-center text-muted py-4">
-                    No bills found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-
-            </Table>
-          </div>
+          
         </Card>
       </Container>
 
