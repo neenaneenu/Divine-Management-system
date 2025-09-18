@@ -3,13 +3,9 @@ import { Card, Container, Row, Col } from "react-bootstrap"
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
 import logo from "../assets/logo.png"
-import license from "../assets/license.png"
 import billing from "../assets/billing.png"
 import reg from "../assets/reg.png"
 import app from "../assets/app.png"
-
-
-
 
 
 const Home = () => {

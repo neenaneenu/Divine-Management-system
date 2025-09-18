@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  Container,
-  Button,
-  Form,
-  InputGroup,
-  Card,
-  Badge,
-} from "react-bootstrap";
+import { Table,Container,Button,Form,InputGroup,Card,} from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -56,118 +48,117 @@ const ViewBills = () => {
         bill.name?.toLowerCase().includes(search.toLowerCase()) ||
         bill.mobile1?.toLowerCase().includes(search.toLowerCase()) ||
         bill.billNumber?.toString().includes(search)
+        
     );
   }
 
   return (
-    <Container className="mt-4">
-      <Card className="shadow-lg rounded-4 border-0">
-        <Card.Body>
-          <h3 className="fw-bold mb-4 text-center text-primary">
-            📑 All Bills
-          </h3>
+    <div
+      style={{
+        backgroundColor: "#002044",
+        minHeight: "100vh",
+        paddingTop: "80px", // ✅ margin from top
+      }}
+    >
+      <Container>
+        <Card className="shadow-lg rounded-4 border-0">
+          <Card.Body className="pt-4">
+            <h3 className="fw-bold mb-4 text-center text-primary">📑 All Bills</h3>
 
-          {/* ✅ Search Box with Button */}
-          <InputGroup className="mb-4 shadow-sm sticky-top">
-            <Form.Control
-              type="text"
-              placeholder="🔎 Search by Bill No, Name, App No, Phone..."
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-            <Button variant="primary" onClick={() => setSearch(searchText)}>
-              Search
-            </Button>
-            <Button
-              variant="outline-secondary"
-              onClick={() => {
-                setSearch("");
-                setSearchText("");
-              }}
-            >
-              Reset
-            </Button>
-             <Button
-              variant="secondary"
-              className="px-4"
-              onClick={() => navigate(-1)}
-            >
-              ⬅ Back
-            </Button>
-          </InputGroup>
+            {/* ✅ Search Box with Button */}
+            <InputGroup className="mb-4 shadow-sm sticky-top bg-white p-2 rounded">
+              <Form.Control
+                type="text"
+                placeholder="🔎 Search by Bill No, Name, App No, Phone..."
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+              <Button variant="primary" onClick={() => setSearch(searchText)}>
+                Search
+              </Button>
+              <Button
+                variant="outline-secondary"
+                onClick={() => {
+                  setSearch("");
+                  setSearchText("");
+                }}
+              >
+                Reset
+              </Button>
+              <Button
+                variant="secondary"
+                className="px-4"
+                onClick={() => navigate(-1)}
+              >
+                ⬅ Back
+              </Button>
+            </InputGroup>
 
-          <div style={{ overflowX: "auto" }}>
-            <Table
-              bordered
-              hover
-              responsive
-              striped
-              className="align-middle shadow-sm rounded"
-            >
-              <thead className="table-dark text-center">
-                <tr>
-                  <th>Bill Number</th>
-                  <th>Name</th>
-                  <th>Phone Number</th>
-                  <th>Amounts</th>
-                  <th>Dates</th>
-                </tr>
-              </thead>
-              <tbody>
-                {finalBills.length > 0 ? (
-                  finalBills.map((bill) => (
-                    <tr key={bill._id}>
-                      <td className="fw-bold  text-center">
-                       
-                          {bill.billNumber}
-                      
-                      </td>
-                      <td>{bill.name}</td>
-                      <td>
-                        {bill.mobile1}
-                        {bill.mobile2 && (
-                          <>
-                            <br />
-                            <span className="text-muted">{bill.mobile2}</span>
-                          </>
-                        )}
-                      </td>
-                      <td>
-                        {bill.amounts.map((amt, idx) => (
-                          <div
-                            key={idx}
-                            className="text-success fw-semibold border-bottom pb-1"
-                          >
-                            ₹{amt}
-                          </div>
-                        ))}
-                      </td>
-                      <td>
-                        {bill.dates.map((date, idx) => (
-                          <div key={idx} className="text-muted small">
-                            📅 {date}
-                          </div>
-                        ))}
+            <div style={{ overflowX: "auto" }}>
+              <Table
+                bordered
+                hover
+                responsive
+                striped
+                className="align-middle shadow-sm rounded"
+              >
+                <thead className="table-dark text-center">
+                  <tr>
+                    <th>Bill Number</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Amounts</th>
+                    <th>Dates</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {finalBills.length > 0 ? (
+                    finalBills.map((bill) => (
+                      <tr key={bill._id}>
+                        <td className="fw-bold text-center">{bill.billNumber}</td>
+                        <td>{bill.name}</td>
+                        <td>
+                          {bill.mobile1}
+                          {bill.mobile2 && (
+                            <>
+                              <br />
+                              <span className="text-muted">{bill.mobile2}</span>
+                            </>
+                          )}
+                        </td>
+                        <td>
+                          {bill.amounts.map((amt, idx) => (
+                            <div
+                              key={idx}
+                              className="text-success fw-semibold border-bottom pb-1"
+                            >
+                              ₹{amt}
+                            </div>
+                          ))}
+                        </td>
+                        <td>
+                          {bill.dates.map((date, idx) => (
+                            <div key={idx} className="text-muted small">
+                              📅 {date}
+                            </div>
+                          ))}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="text-center text-muted py-4">
+                        🚫 No bills found
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="text-center text-muted py-4">
-                      🚫 No bills found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </Table>
-          </div>
-
-          <div className="text-center mt-4">
-           
-          </div>
-        </Card.Body>
-      </Card>
-    </Container>
+                  )}
+                </tbody>
+              </Table>
+            </div>
+          </Card.Body>
+        </Card>
+      </Container>
+    </div>
   );
 };
 
