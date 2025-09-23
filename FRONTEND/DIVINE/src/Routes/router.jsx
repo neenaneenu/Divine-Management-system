@@ -7,6 +7,7 @@ import ApplicationList from "../pages/ApplicationList";
 import EditApplication from "../pages/EditApplication";
 import BillingForm from "../pages/billing";
 import ViewBills from "../pages/ViewBills";
+import SavedApplications from "../pages/Savedapplications";
 
 
 const AppRouter = () => {
@@ -20,6 +21,8 @@ const AppRouter = () => {
         <Route path="/application/edit/:id" element={<EditApplication />} />
         <Route path="/billing" element={<BillingForm/>}/>
         <Route path="/bills" element={<ViewBills />} />
+        <Route path="/saved" element={<SavedApplications />} />
+
         
 
         

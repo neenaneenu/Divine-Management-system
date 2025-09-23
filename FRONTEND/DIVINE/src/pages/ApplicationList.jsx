@@ -103,6 +103,13 @@ const handlePrint = () => {
   win.print();
 };
 
+const handleSave = () => {
+  navigate("/saved", { state: { savedApps: selectedApps } });
+};
+
+
+
+
 
   return (
     <div style={{ minHeight: "100vh", padding: "40px 0", backgroundColor: "#002044" }}>
@@ -200,6 +207,7 @@ const handlePrint = () => {
                 <th>class of vehicle</th>
                 <th>DOB</th>
                 <th>Mobile</th>
+                 <th>Remarks</th> {/* ✅ Extra empty column */}
               
               </tr>
             </thead>
@@ -211,6 +219,7 @@ const handlePrint = () => {
                   <td>{app.vehicleClass}</td>
                   <td>{new Date(app.dob).toLocaleDateString()}</td>
                   <td>{app.mobile1}</td>
+                  <td></td> 
                   
                 </tr>
               ))}
@@ -220,6 +229,7 @@ const handlePrint = () => {
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
           <Button variant="primary" onClick={handlePrint}>🖨 Print</Button>
+         <Button variant="success" onClick={handleSave}>💾 Save</Button>
         </Modal.Footer>
       </Modal>
 
