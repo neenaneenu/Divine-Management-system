@@ -8,6 +8,8 @@ const ApplicationList = () => {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedApps, setSelectedApps] = useState([]);
+  const [savedApps, setSavedApps] = useState([]);
+
   const printRef = useRef();
 
   const navigate = useNavigate();
@@ -57,10 +59,11 @@ const ApplicationList = () => {
   }, [search]);
 
   // 🖨 Print Function
+// 🖨 Print Function
 const handlePrint = () => {
   const printContent = printRef.current.innerHTML;
   const win = window.open("", "", "width=900,height=650");
-  
+
   win.document.write(`
     <html>
       <head>
@@ -71,10 +74,12 @@ const handlePrint = () => {
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         />
         <style>
-          /* ✅ Print-specific adjustments */
+          /* ✅ General Styles */
           body {
             font-family: Arial, sans-serif;
             padding: 20px;
+            font-weight: bold; /* Make all text bold */
+            color: #000; /* Ensure black text for better print visibility */
           }
           table {
             width: 100%;
@@ -83,10 +88,12 @@ const handlePrint = () => {
           th, td {
             text-align: center;
             padding: 8px;
+            border: 1px solid #000;
+            font-weight: bold; /* Ensure bold text in table */
           }
           th {
-            background-color: #343a40;
-            color: white;
+            background-color: #343a40 !important;
+            color: white !important;
           }
           @media print {
             button { display: none; } /* hide buttons on print */
@@ -103,9 +110,14 @@ const handlePrint = () => {
   win.print();
 };
 
+
+// In ApplicationList.jsx
 const handleSave = () => {
+  localStorage.setItem("savedApps", JSON.stringify(selectedApps)); // persist
   navigate("/saved", { state: { savedApps: selectedApps } });
 };
+
+
 
 
 
@@ -202,24 +214,30 @@ const handleSave = () => {
           <Table bordered hover responsive className="align-middle">
             <thead className="table-dark">
               <tr>
+                 <th>Name</th>
                 <th>App No</th>
-                <th>Name</th>
-                <th>class of vehicle</th>
+               
                 <th>DOB</th>
                 <th>Mobile</th>
-                 <th>Remarks</th> {/* ✅ Extra empty column */}
-              
+                <th>class of vehicle</th>
+                
+                
+                 <th>MDS</th> {/* ✅ Extra empty column */}
+                 <th>Cash</th>
               </tr>
             </thead>
             <tbody>
               {selectedApps.map((app) => (
                 <tr key={app._id}>
-                  <td>{app.applicationNumber}</td>
                   <td>{app.name}</td>
-                  <td>{app.vehicleClass}</td>
+                  <td>{app.applicationNumber}</td>
                   <td>{new Date(app.dob).toLocaleDateString()}</td>
                   <td>{app.mobile1}</td>
+                  <td>{app.vehicleClass}</td>
+                  
+                 
                   <td></td> 
+                  <td></td>
                   
                 </tr>
               ))}
