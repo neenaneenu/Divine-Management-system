@@ -112,10 +112,29 @@ const handlePrint = () => {
 
 
 // In ApplicationList.jsx
-const handleSave = () => {
-  localStorage.setItem("savedApps", JSON.stringify(selectedApps)); // persist
-  navigate("/saved", { state: { savedApps: selectedApps } });
+
+
+
+const handleSave = async () => {
+  try {
+    // Save locally
+    localStorage.setItem("savedApps", JSON.stringify(selectedApps));
+
+    // ✅ Correct backend URL
+    const response = await axios.post("http://localhost:3000/api/saved/save", {
+      applications: selectedApps, // sending the array of selected apps
+    });
+
+    console.log("✅ Saved to backend:", response.data);
+
+    navigate("/saved", { state: { savedApps: selectedApps } });
+
+  } catch (error) {
+    console.error("❌ Error saving to backend:", error);
+    alert("Failed to save applications to server!");
+  }
 };
+
 
 
 
@@ -212,36 +231,31 @@ const handleSave = () => {
         </Modal.Header>
         <Modal.Body ref={printRef}>
           <Table bordered hover responsive className="align-middle">
-            <thead className="table-dark">
-              <tr>
-                 <th>Name</th>
-                <th>App No</th>
-               
-                <th>DOB</th>
-                <th>Mobile</th>
-                <th>class of vehicle</th>
-                
-                
-                 <th>MDS</th> {/* ✅ Extra empty column */}
-                 <th>Cash</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedApps.map((app) => (
-                <tr key={app._id}>
-                  <td>{app.name}</td>
-                  <td>{app.applicationNumber}</td>
-                  <td>{new Date(app.dob).toLocaleDateString()}</td>
-                  <td>{app.mobile1}</td>
-                  <td>{app.vehicleClass}</td>
-                  
-                 
-                  <td></td> 
-                  <td></td>
-                  
-                </tr>
-              ))}
-            </tbody>
+           <thead className="table-dark">
+  <tr>
+    <th>Name</th>
+    <th>App No</th>
+    <th>DOB</th>
+    <th>Mobile</th>
+    <th>Class of Vehicle</th>
+    <th>MDS</th>
+    <th>Cash</th>
+  </tr>
+</thead>
+<tbody>
+  {selectedApps.map((app) => (
+    <tr key={app._id}>
+      <td>{app.name}</td>
+      <td>{app.applicationNumber}</td>
+      <td>{new Date(app.dob).toLocaleDateString()}</td>
+      <td>{app.mobile1}</td>
+      <td>{app.vehicleClass}</td>
+      <td></td>
+      <td></td>
+    </tr>
+  ))}
+</tbody>
+
           </Table>
         </Modal.Body>
         <Modal.Footer>

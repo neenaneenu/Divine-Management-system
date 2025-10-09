@@ -5,6 +5,7 @@ import dbConnect from "./config/db.config.mjs"
 import userRoute from "./routes/user.route.mjs"
 import applicationRoutes from "./routes/applcation.route.mjs"
 import  billRoutes from "./routes/bill.route.mjs"
+import saveroute from "./routes/saved.route.mjs"
 
 
 env.config() 
@@ -22,6 +23,7 @@ app.use("/api/users", userRoute)
 app.use("/uploads", express.static("uploads"));
 app.use("/application", applicationRoutes);
 app.use("/bills", billRoutes);
+app.use("/api/saved", saveroute);
 
 
 
