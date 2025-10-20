@@ -7,8 +7,8 @@ import {
 
 const router = express.Router();
 
-router.post("/save", saveApplications);
-router.get("/", getAllApplications);
+router.post("/", saveApplications);
+router.get("/getSave", getAllApplications);
 
 
 export default router;

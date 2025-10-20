@@ -5,7 +5,6 @@ import Application from "../models/application.model.mjs";
 // Create new application
 export const createApplication = async (req, res) => {
   try {
-    // Destructure all fields from request body
     const {
       applicationNumber,
       name,
@@ -23,13 +22,15 @@ export const createApplication = async (req, res) => {
       testDate,
       leanersDate,
       SlNo,
-      
     } = req.body;
 
     // Handle uploaded files
     const photo = req.files?.photo ? req.files.photo[0].filename : null;
     const signature = req.files?.signature ? req.files.signature[0].filename : null;
-    const licenseFile = req.files?.licenseFile ? req.files.licenseFile[0].filename : null;
+    const documents = req.files?.documents
+  ? req.files.documents.map((file) => file.filename)
+  : [];
+
 
     // Save into DB
     const application = new Application({
@@ -46,24 +47,25 @@ export const createApplication = async (req, res) => {
       email,
       photo,
       signature,
-      licenseFile,
+      documents, // store array of filenames
       billNumber,
       amount,
-      testDate,
+      testDate: testDate || Date.now(), // ensure testDate is stored
       leanersDate,
-      SlNo
+      SlNo,
     });
 
     await application.save();
 
     res.status(201).json({
       message: "Application created successfully",
-      application
+      application,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 // Get all applications
 export const getApplications = async (req, res) => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Table, Container, Form, Button, Card, Modal } from "react-bootstrap";
+import { Table, Container, Form, Button, Card, Modal, Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -8,12 +8,10 @@ const ApplicationList = () => {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedApps, setSelectedApps] = useState([]);
-  const [savedApps, setSavedApps] = useState([]);
-
   const printRef = useRef();
-
   const navigate = useNavigate();
 
+  // ✅ Fetch Data
   useEffect(() => {
     const fetchApplications = async () => {
       try {
@@ -26,19 +24,22 @@ const ApplicationList = () => {
     fetchApplications();
   }, []);
 
-  const searchTerm = search.toLowerCase();
+  // ✅ Safe search term
+  const searchTerm = (search || "").toLowerCase();
 
-  // 🔎 Filtering
-  const filteredApplications = applications.filter((app) => {
-    const name = app.name?.toLowerCase() || "";
-    const applicationNumber = app.applicationNumber?.toLowerCase() || "";
-    const testDate = app.testDate
-      ? new Date(app.testDate).toLocaleDateString().toLowerCase()
-      : "";
-    const leanersDate = app.leanersDate
-      ? new Date(app.leanersDate).toLocaleDateString().toLowerCase()
-      : "";
-
+  // ✅ Filtering logic (safe and flexible)
+  const filteredApplications = (applications || []).filter((app) => {
+    if (!app) return false;
+    const name = (app.name || "").toLowerCase();
+    const applicationNumber = (app.applicationNumber || "").toLowerCase();
+    const testDate =
+      app.testDate && !isNaN(new Date(app.testDate))
+        ? new Date(app.testDate).toLocaleDateString().toLowerCase()
+        : "";
+    const leanersDate =
+      app.leanersDate && !isNaN(new Date(app.leanersDate))
+        ? new Date(app.leanersDate).toLocaleDateString().toLowerCase()
+        : "";
     return (
       name.includes(searchTerm) ||
       applicationNumber.includes(searchTerm) ||
@@ -47,7 +48,7 @@ const ApplicationList = () => {
     );
   });
 
-  // 🎯 Check if search is date-like → Open Modal
+  // ✅ Auto-open modal on date search
   useEffect(() => {
     if (search && filteredApplications.length > 0) {
       const isDateSearch = /\d{1,2}\/\d{1,2}\/\d{4}/.test(search);
@@ -58,125 +59,102 @@ const ApplicationList = () => {
     }
   }, [search]);
 
-  // 🖨 Print Function
+   // 🖨 Print Function
+  const [isPrintMode, setIsPrintMode] = useState(false);
+
 // 🖨 Print Function
 const handlePrint = () => {
-  const printContent = printRef.current.innerHTML;
-  const win = window.open("", "", "width=900,height=650");
+  setIsPrintMode(true);
 
-  win.document.write(`
-    <html>
-      <head>
-        <title>Print</title>
-        <!-- ✅ Bootstrap CSS for styling -->
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        />
-        <style>
-          /* ✅ General Styles */
-          body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            font-weight: bold; /* Make all text bold */
-            color: #000; /* Ensure black text for better print visibility */
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-          }
-          th, td {
-            text-align: center;
-            padding: 8px;
-            border: 1px solid #000;
-            font-weight: bold; /* Ensure bold text in table */
-          }
-          th {
-            background-color: #343a40 !important;
-            color: white !important;
-          }
-          @media print {
-            button { display: none; } /* hide buttons on print */
-          }
-        </style>
-      </head>
-      <body>
-        ${printContent}
-      </body>
-    </html>
-  `);
-
-  win.document.close();
-  win.print();
+  setTimeout(() => {
+    const printContent = printRef.current.innerHTML;
+    const win = window.open("", "", "width=900,height=650");
+    win.document.write(`
+      <html>
+        <head>
+          <title>Print</title>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+          <style>
+            body { font-family: Arial; padding: 20px; color: #000; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #000; padding: 8px; text-align: center; }
+            th { background-color: #343a40; color: white; }
+          </style>
+        </head>
+        <body>${printContent}</body>
+      </html>
+    `);
+    win.document.close();
+    win.print();
+    setIsPrintMode(false); // Reset after printing
+  }, 200);
 };
 
-
-// In ApplicationList.jsx
-
-
-
+// 💾 Save Function
 const handleSave = async () => {
   try {
-    // Save locally
     localStorage.setItem("savedApps", JSON.stringify(selectedApps));
-
-    // ✅ Correct backend URL
-    const response = await axios.post("http://localhost:3000/api/saved/save", {
-      applications: selectedApps, // sending the array of selected apps
+    const response = await axios.post("http://localhost:3000/saved", {
+      applications: selectedApps,
     });
-
-    console.log("✅ Saved to backend:", response.data);
-
+    console.log("✅ Saved:", response.data);
+    setIsPrintMode(false); // Ensure KDS/LMD columns are hidden again
     navigate("/saved", { state: { savedApps: selectedApps } });
-
   } catch (error) {
-    console.error("❌ Error saving to backend:", error);
-    alert("Failed to save applications to server!");
+    console.error("❌ Error saving:", error);
+    alert("Failed to save!");
   }
 };
 
-
-
-
-
-
-
+  
 
   return (
-    <div style={{ minHeight: "100vh", padding: "40px 0", backgroundColor: "#002044" }}>
-      <Container fluid="lg" style={{ maxWidth: "95%", margin: "0 auto", overflowX: "hidden" }}>
-        <Card className="shadow-lg rounded-4 p-4 border-0">
-          {/* 🔹 Header Section */}
-          <div className="d-flex justify-content-between align-items-center mb-4 p-3 rounded-3" style={{ backgroundColor: "#f8f9fa" }}>
-            <h2 className="mb-0 text-dark fw-bold">📄 Registered Applications</h2>
+    <div style={{ minHeight: "100vh", backgroundColor: "#f4f6f9", padding: "40px 0" }}>
+      <Container fluid="lg" style={{ maxWidth: "95%" }}>
+        <Card className="shadow-lg rounded-4 border-0 overflow-hidden">
+          {/* Header */}
+          <div
+            className="d-flex justify-content-between align-items-center p-4"
+            style={{ backgroundColor: "#002244", color: "white" }}
+          >
+            <h3 className="fw-bold m-0">📋 Registered Applications</h3>
             <div className="d-flex gap-2">
-              <Button variant="outline-secondary" onClick={() => navigate("/Home")}>
+              <Button variant="light" size="sm" onClick={() => navigate("/Home")}>
                 ⬅ Back
               </Button>
-              <Button variant="outline-secondary" onClick={() => navigate("/billing")}>
-                💳 Bill
+              <Button variant="outline-light" size="sm" onClick={() => navigate("/billing")}>
+                💳 Billing
               </Button>
             </div>
           </div>
 
-          {/* 🔍 Search Bar */}
-          <Form className="mb-4">
+          {/* Search Bar */}
+          <div className="p-3 bg-light border-bottom">
             <Form.Control
               type="text"
-              placeholder="🔎 Search by Application No, Name or Date..."
+              placeholder="🔍 Search by Name, Application No, or Date (DD/MM/YYYY)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="shadow-sm"
             />
-          </Form>
+          </div>
 
-          {/* ✅ Table */}
+          {/* Applications Table */}
           <div style={{ overflowX: "auto" }}>
-            <Table bordered hover responsive className="align-middle shadow-sm" style={{ borderRadius: "12px", overflow: "hidden" }}>
-              <thead className="table-dark" style={{ position: "sticky", top: 0, zIndex: 2 }}>
+            <Table
+              bordered
+              hover
+              responsive
+              className="align-middle mb-0 text-center"
+              style={{ borderRadius: "12px", overflow: "hidden" }}
+            >
+              <thead
+                className="table-dark"
+                style={{ position: "sticky", top: 0, zIndex: 2 }}
+              >
                 <tr>
+                  <th>#</th>
                   <th>App No</th>
-                  <th>Sl No</th>
                   <th>Name</th>
                   <th>Father</th>
                   <th>DOB</th>
@@ -185,27 +163,95 @@ const handleSave = async () => {
                   <th>Blood</th>
                   <th>Amount</th>
                   <th>Test Date</th>
-                  <th>Learner Test</th>
-                  <th>Actions</th>
+                  <th>Learner Date</th>
+                  <th>Documents</th>
+                  <th>Photo</th>
+                  <th>Signature</th>
+                  <th>Action</th>
                 </tr>
               </thead>
+
               <tbody>
                 {filteredApplications.length > 0 ? (
-                  filteredApplications.map((app) => (
+                  filteredApplications.map((app, idx) => (
                     <tr key={app._id}>
-                      <td>{app.applicationNumber || "Not Assigned"}</td>
-                      <td>{app.SlNo}</td>
-                      <td>{app.name}</td>
+                      <td>{idx + 1}</td>
+                      <td><Badge bg="secondary">{app.applicationNumber || "N/A"}</Badge></td>
+                      <td className="fw-semibold">{app.name}</td>
                       <td>{app.fatherName}</td>
                       <td>{new Date(app.dob).toLocaleDateString()}</td>
                       <td>{app.mobile1}</td>
                       <td>{app.vehicleClass}</td>
                       <td>{app.bloodGroup}</td>
-                      <td className="fw-bold text-success">{app.amount}</td>
-                      <td>{app.testDate ? new Date(app.testDate).toLocaleDateString() : "Not Assigned"}</td>
-                      <td>{app.leanersDate ? new Date(app.leanersDate).toLocaleDateString() : "Not Assigned"}</td>
+                      <td className="text-success fw-bold">₹{app.amount}</td>
+                      <td>{app.testDate ? new Date(app.testDate).toLocaleDateString() : "Not Set"}</td>
+                      <td>{app.leanersDate ? new Date(app.leanersDate).toLocaleDateString() : "Not Set"}</td>
+
+                      {/* Documents */}
                       <td>
-                        <Button variant="warning" size="sm" onClick={() => navigate(`/application/edit/${app._id}`)}>
+                        {app.documents?.length ? (
+                          app.documents.map((doc, i) => (
+                            <div key={i}>
+                              <a
+        href={`http://localhost:3000/${doc.includes("uploads/") ? doc : "uploads/" + doc}`}
+        target="_blank"
+        rel="noreferrer"
+        className="text-decoration-none text-primary"
+      >
+                                📄 Doc {i + 1}
+                              </a>
+                            </div>
+                          ))
+                        ) : (
+                          <span className="text-muted">No Docs</span>
+                        )}
+                      </td>
+
+                      {/* Photo */}
+                      <td>
+                        {app.photo ? (
+                          <img
+                            src={`http://localhost:3000/uploads/${app.photo}`}
+                            alt="photo"
+                            style={{
+                              width: "50px",
+                              height: "50px",
+                              objectFit: "cover",
+                              borderRadius: "6px",
+                            }}
+                          />
+                        ) : (
+                          <span className="text-muted">No Photo</span>
+                        )}
+                      </td>
+
+                      {/* Signature */}
+                      <td>
+                        {app.signature ? (
+                          <img
+                            src={`http://localhost:3000/uploads/${app.signature}`}
+                            alt="signature"
+                            style={{
+                              width: "70px",
+                              height: "40px",
+                              objectFit: "contain",
+                              borderRadius: "6px",
+                              background: "#f8f9fa",
+                              padding: "2px",
+                            }}
+                          />
+                        ) : (
+                          <span className="text-muted">No Signature</span>
+                        )}
+                      </td>
+
+                      {/* Action */}
+                      <td>
+                        <Button
+                          variant="outline-warning"
+                          size="sm"
+                          onClick={() => navigate(`/application/edit/${app._id}`)}
+                        >
                           ✏ Edit
                         </Button>
                       </td>
@@ -213,7 +259,7 @@ const handleSave = async () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="12" className="text-center text-muted py-4">
+                    <td colSpan="15" className="text-muted py-4">
                       No applications found
                     </td>
                   </tr>
@@ -224,46 +270,63 @@ const handleSave = async () => {
         </Card>
       </Container>
 
-     {/* 📌 Modal for Date Search Results */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>
-        <Modal.Header closeButton>
-          <Modal.Title>📋 Applications Found</Modal.Title>
-        </Modal.Header>
-        <Modal.Body ref={printRef}>
-          <Table bordered hover responsive className="align-middle">
-           <thead className="table-dark">
-  <tr>
-    <th>Name</th>
-    <th>App No</th>
-    <th>DOB</th>
-    <th>Mobile</th>
-    <th>Class of Vehicle</th>
-    <th>MDS</th>
-    <th>Cash</th>
-  </tr>
-</thead>
-<tbody>
-  {selectedApps.map((app) => (
-    <tr key={app._id}>
-      <td>{app.name}</td>
-      <td>{app.applicationNumber}</td>
-      <td>{new Date(app.dob).toLocaleDateString()}</td>
-      <td>{app.mobile1}</td>
-      <td>{app.vehicleClass}</td>
-      <td></td>
-      <td></td>
-    </tr>
-  ))}
-</tbody>
+      {/* 📅 Modal */}
+     <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>
+  <Modal.Header closeButton className="bg-dark text-white">
+    <Modal.Title>📆 Applications on {search}</Modal.Title>
+  </Modal.Header>
 
-          </Table>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
-          <Button variant="primary" onClick={handlePrint}>🖨 Print</Button>
-         <Button variant="success" onClick={handleSave}>💾 Save</Button>
-        </Modal.Footer>
-      </Modal>
+  <Modal.Body ref={printRef}>
+    <Table bordered hover responsive className="align-middle text-center">
+      <thead className="table-dark">
+        <tr>
+          {/* Hide Test Date when in print mode */}
+          {!isPrintMode && <th>Test Date</th>}
+          <th>Name</th>
+          <th>App No</th>
+          <th>DOB</th>
+          <th>Mobile</th>
+          <th>Vehicle</th>
+
+          {/* Show KDS & LMD only in print mode */}
+          {isPrintMode && <th>MDS</th>}
+          {isPrintMode && <th>CASH</th>}
+        </tr>
+      </thead>
+
+      <tbody>
+        {selectedApps.map((app) => (
+          <tr key={app._id}>
+            {!isPrintMode && (
+              <td>{app.testDate ? new Date(app.testDate).toLocaleDateString() : "Not Set"}</td>
+            )}
+            <td>{app.name}</td>
+            <td>{app.applicationNumber}</td>
+            <td>{new Date(app.dob).toLocaleDateString()}</td>
+            <td>{app.mobile1}</td>
+            <td>{app.vehicleClass}</td>
+
+            {/* Empty KDS/LMD columns for print */}
+            {isPrintMode && <td>M</td>}
+            {isPrintMode && <td></td>}
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  </Modal.Body>
+
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowModal(false)}>
+      Close
+    </Button>
+    <Button variant="outline-primary" onClick={handlePrint}>
+      🖨 Print
+    </Button>
+    <Button variant="success" onClick={handleSave}>
+      💾 Save
+    </Button>
+  </Modal.Footer>
+</Modal>
 
     </div>
   );

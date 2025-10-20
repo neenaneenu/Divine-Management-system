@@ -14,6 +14,7 @@ const applicationSchema = new mongoose.Schema({
   photo: { type: String },      // file path / URL
   signature: { type: String },  // file path / URL
   billNumber: { type: String },
+  documents: [{ type: String }], // ✅ array of file names
   amount: { type: Number },
   date: { type: Date, default: Date.now },
   testDate: {type: Date , default: Date.now},

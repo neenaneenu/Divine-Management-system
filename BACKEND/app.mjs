@@ -23,7 +23,7 @@ app.use("/api/users", userRoute)
 app.use("/uploads", express.static("uploads"));
 app.use("/application", applicationRoutes);
 app.use("/bills", billRoutes);
-app.use("/api/saved", saveroute);
+app.use("/saved", saveroute);
 
 
 

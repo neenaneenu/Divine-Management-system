@@ -25,6 +25,8 @@ const DrivingSchoolForm = () => {
 
   const [photo, setPhoto] = useState(null);
   const [signature, setSignature] = useState(null);
+  const [documents, setDocuments] = useState([]);
+
 
   const navigate = useNavigate();
 
@@ -43,26 +45,40 @@ const DrivingSchoolForm = () => {
   };
 
   // Submit form
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const data = new FormData();
-      Object.keys(formData).forEach((key) => {
-        data.append(key, formData[key]);
-      });
-      if (photo) data.append("photo", photo);
-      if (signature) data.append("signature", signature);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const data = new FormData();
 
-      const res = await axios.post("http://localhost:3000/application/post", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+    // Append all form fields
+    Object.keys(formData).forEach((key) => {
+      data.append(key, formData[key]);
+    });
 
-      alert("Application Submitted Successfully ✅");
-      console.log(res.data);
-    } catch (error) {
-      console.error(error);
-      alert("Error submitting application ❌");
+    // Append photo and signature
+    if (photo) data.append("photo", photo);
+    if (signature) data.append("signature", signature);
+
+    // Append multiple documents
+    if (documents) {
+      Array.from(documents).forEach((file) => {
+        data.append("documents", file); // field name should match backend
+      });
     }
+
+    const res = await axios.post(
+      "http://localhost:3000/application/post",
+      data,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+
+    alert("Application Submitted Successfully ✅");
+    console.log(res.data);
+  } catch (error) {
+    console.error(error);
+    alert("Error submitting application ❌");
+  }
+
   };
 
   return (
@@ -111,6 +127,16 @@ const DrivingSchoolForm = () => {
                   </Form.Group>
                 </Col>
               </Row>
+              <Form.Group className="mb-3">
+  <Form.Label>Upload Documents</Form.Label>
+  <Form.Control
+    type="file"
+    name="documents"
+    multiple
+    onChange={(e) => setDocuments(e.target.files)}
+  />
+</Form.Group>
+
 
               <Row>
                 <Col md={6}>
