@@ -13,7 +13,7 @@ const BillingDetails = () => {
 
   const navigate = useNavigate();
 
-  // 🔹 Fetch applications
+  // 🔹 Fetch application
   useEffect(() => {
     const fetchApplications = async () => {
       try {

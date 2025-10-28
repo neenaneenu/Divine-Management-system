@@ -127,15 +127,16 @@ const DrivingSchoolForm = () => {
                   </Form.Group>
                 </Col>
               </Row>
+              
               <Form.Group className="mb-3">
-  <Form.Label>Upload Documents</Form.Label>
-  <Form.Control
-    type="file"
-    name="documents"
-    multiple
-    onChange={(e) => setDocuments(e.target.files)}
-  />
-</Form.Group>
+              <Form.Label>Upload Documents</Form.Label>
+              <Form.Control
+                type="file"
+                name="documents"
+                multiple
+                onChange={(e) => setDocuments(e.target.files)}
+              />
+            </Form.Group>
 
 
               <Row>

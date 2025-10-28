@@ -188,24 +188,54 @@ const handleSave = async () => {
                       <td>{app.leanersDate ? new Date(app.leanersDate).toLocaleDateString() : "Not Set"}</td>
 
                       {/* Documents */}
-                      <td>
-                        {app.documents?.length ? (
-                          app.documents.map((doc, i) => (
-                            <div key={i}>
-                              <a
-        href={`http://localhost:3000/${doc.includes("uploads/") ? doc : "uploads/" + doc}`}
-        target="_blank"
-        rel="noreferrer"
-        className="text-decoration-none text-primary"
-      >
-                                📄 Doc {i + 1}
-                              </a>
-                            </div>
-                          ))
-                        ) : (
-                          <span className="text-muted">No Docs</span>
-                        )}
-                      </td>
+                     <td>
+  {app.documents?.length ? (
+    app.documents.map((doc, i) => {
+      const fileUrl = `http://localhost:3000/${doc.includes("uploads/") ? doc : "uploads/" + doc}`;
+      const isImage = /\.(jpg|jpeg|png|gif)$/i.test(doc);
+      const isPDF = /\.pdf$/i.test(doc);
+
+      return (
+        <div key={i} className="mb-2">
+          {isImage ? (
+            <img
+              src={fileUrl}
+              alt={`Document ${i + 1}`}
+              style={{
+                width: "70px",
+                height: "70px",
+                objectFit: "cover",
+                borderRadius: "6px",
+                marginRight: "5px",
+              }}
+            />
+          ) : isPDF ? (
+            <a
+              href={fileUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-decoration-none text-danger"
+            >
+              📄 View PDF ({doc.split("/").pop()})
+            </a>
+          ) : (
+            <a
+              href={fileUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-decoration-none text-secondary"
+            >
+              📎 {doc.split("/").pop()}
+            </a>
+          )}
+        </div>
+      );
+    })
+  ) : (
+    <span className="text-muted">No Documents</span>
+  )}
+</td>
+
 
                       {/* Photo */}
                       <td>
