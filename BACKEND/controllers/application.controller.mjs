@@ -93,15 +93,30 @@ export const getApplicationById = async (req, res) => {
 // Update application
 export const updateApplication = async (req, res) => {
   try {
-    const application = await Application.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedData = { ...req.body };
+
+    // 🆕 Handle new document uploads
+    if (req.files && req.files.documents) {
+      const newDocs = req.files.documents.map((file) => file.path);
+      updatedData.$push = { documents: { $each: newDocs } }; // append instead of replace
+    }
+
+    const application = await Application.findByIdAndUpdate(
+      req.params.id,
+      updatedData,
+      { new: true, runValidators: true }
+    );
+
     if (!application) {
       return res.status(404).json({ message: "Application not found" });
     }
+
     res.status(200).json({ message: "Application updated", application });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 // Delete application
 export const deleteApplication = async (req, res) => {

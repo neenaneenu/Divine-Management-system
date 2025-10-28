@@ -13,7 +13,7 @@ const router = express.Router();
 
 // Create application (with file upload)
 router.post(
-  "/post",
+  "/post", 
   upload.fields([
     { name: "photo", maxCount: 1 },
     { name: "signature", maxCount: 1 },
@@ -24,7 +24,16 @@ router.post(
 // Other routes
 router.get("/", getApplications);
 router.get("/:id", getApplicationById);
-router.put("/:id", updateApplication);
+router.put(
+  "/:id",
+  upload.fields([
+    { name: "photo", maxCount: 1 },
+    { name: "signature", maxCount: 1 },
+    { name: "documents", maxCount: 10 },
+  ]),
+  updateApplication
+);
+
 router.delete("/:id", deleteApplication);
 
 export default router;
